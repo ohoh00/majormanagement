@@ -1,21 +1,22 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 import uploadexcel from '../views/upload-excel.vue'
+import dashboard from '../views/Dashboard.vue'
 import read from '../components/Readdatatest.vue'
+
 
 Vue.use(VueRouter)
 
   const routes = [
   {
     path: '/',
-    name: 'uploadexcel',
-    component: uploadexcel
+    name: 'dashboard',
+    component: dashboard
   },
   {
-    path: '/home',
-    name: 'Home',
-    component: Home
+    path: '/uploadexcel',
+    name: 'uploadexcel',
+    component: uploadexcel
   },
   {
     path: '/read',

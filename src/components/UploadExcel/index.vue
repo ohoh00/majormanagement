@@ -14,7 +14,7 @@
 import XLSX from 'xlsx'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import Popup from '@/components/Popup.vue'
+import Popup from '@/components/UploadExcel/Popup.vue'
 export default {
   components: { Popup },
   props: {
@@ -100,9 +100,9 @@ export default {
           //console.log(`firstSheetName = ${firstSheetName}`)
           const worksheet = workbook.Sheets[firstSheetName]
           const header = this.getHeaderRow(worksheet)
-          console.log(`header = ${header[0]}`)
+          //console.log(`header = ${header[0]}`)
           const results = XLSX.utils.sheet_to_json(worksheet)
-          console.log(`results = ${JSON.stringify(results[0])}`)
+          //console.log(`results = ${JSON.stringify(results[0])}`)
           this.generateData({ header, results })
           this.loading = false
           resolve()

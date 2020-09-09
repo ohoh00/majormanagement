@@ -8,7 +8,7 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
         <b-nav-item href="/">Dashboard</b-nav-item>
-        <b-nav-item href="/">Upload Excel</b-nav-item>
+        <b-nav-item href="/uploadexcel">Upload Excel</b-nav-item>
         <b-nav-item href="/read" >test</b-nav-item>
       </b-navbar-nav>
 
