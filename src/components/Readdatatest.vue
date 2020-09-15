@@ -2,27 +2,27 @@
     <div>
         <button @click="Countdocuments()">คลิก</button>
         <button @click="readtest()">คลิก2</button>
-        {{this.num}}
     </div>
 </template>
 
 <script>
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import firebase from '@/firebaseConfig'
-const db = firebase.firestore()
+//import firebase from '@/firebaseConfig'
+//const db = firebase.firestore()
 export default {
     data(){
         return{
             datas: [],
+            //Name: [],
+            //Gpax: [],
+            //Gpoint: [],
             doc_count: null,
-            num: null
-            //Gpax: []
         }
     },
-    methods : {
+    /*methods : {
         Countdocuments() {
-            db.collection('Students').doc('Years').collection('2563').get().then((snapshot) =>
+            db.collection('Students').doc('Years').collection('2560').get().then((snapshot) =>
             {
                 this.doc_count = snapshot.docs.length
                 console.log(this.doc_count)
@@ -37,33 +37,20 @@ export default {
             console.log('มาแล้ว')
             console.log(count)
             for(i = 0; i < count; i++) {
-                db.collection('Students').doc('Years').collection('2563').doc(`Set${i}`).get()
+                db.collection('Students').doc('Years').collection('2560').doc(`Set${i}`).get()
                 .then((docs) => {
                 for(j = 0; j < docs.data().Datas.length; j++){
-                    //console.log(`results = ${JSON.stringify(docs.data().Datas[j].GPAX)}`)
-                    this.datas[k++] = docs.data().Datas[j]
-                    this.num = this.num + docs.data().Datas[j].GPAX
-                    //console.log(j)
+                    console.log('มาแล้ว 2')
+                    this.Name[k] = docs.data().Datas[j].NAME
+                    this.Gpax[k] = docs.data().Datas[j].GPAX
+                    this.Gpoint[k] = docs.data().Datas[j].GRADEPOINT
+                    k++
                 }
-                console.log(`results = ${JSON.stringify(this.datas)}`)
-                console.log(`results = ${JSON.stringify(this.datas.length)}`)
-                console.log(`results = ${JSON.stringify(this.num)}`)
-                //console.log(`results = ${JSON.stringify(docs.data().Datas[1])}`)
-                //console.log(`resultssss = ${this.datas}`)
-                //console.log(`results1 = ${docs.data()}`)
+                console.log(`results = ${this.Name}`)
+                console.log(`results = ${this.Gpax}`)
                 });
                 }
-                console.log('gliH0c]h;')
             },
-        datasread() {
-            //console.log(`results = ${JSON.stringify(this.datas.GPAX)}`)
-            //console.log(`results = ${JSON.stringify()}`)
-            //console.log(this.datas.length)
-            //var i
-            /*for(i = 0; i< 200; i++){
-                console.log(this.datas[i])
-            }*/
-        },
         readtest() {
              db.collection('Students').doc('Years').get()
                 .then(function(docs) {
@@ -71,10 +58,6 @@ export default {
                     //console.log(`results = ${JSON.stringify(docs.data().Datas.length)}`)
                 })
             }
-        },
+        },*/
     }
 </script>
-
-<style scoped>
-
-</style>

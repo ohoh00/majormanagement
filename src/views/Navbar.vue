@@ -9,7 +9,7 @@
       <b-navbar-nav>
         <b-nav-item href="/">Dashboard</b-nav-item>
         <b-nav-item href="/uploadexcel">Upload Excel</b-nav-item>
-        <b-nav-item href="/read" >test</b-nav-item>
+        <b-nav-item >test</b-nav-item>
       </b-navbar-nav>
 
        <!-- Right aligned nav items -->

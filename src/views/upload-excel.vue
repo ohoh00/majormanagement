@@ -36,6 +36,10 @@ export default {
     handleSuccess ({ results, header }) {
       this.tableData = results
       this.tableHeader = header
+      /*results.forEach(l => {
+        console.log(l.ลำดับ1)
+      });*/
+      //console.log(`results = ${JSON.stringify(results.NAME)}`)
     }
   }
 }

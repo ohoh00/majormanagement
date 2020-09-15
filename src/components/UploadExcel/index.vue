@@ -6,7 +6,7 @@
         <button type="button" class='btn btn-primary' style="margin-left:16px;" size="mini" @click="handleUpload">Browse</button>
         </div>
         <p></p>
-        <Popup :excelDatas="excelData.results"/>
+        <Popup :excelDatas="excelData.results" :excelKey="excelData.header"/>
     </div>
 </template>
 
