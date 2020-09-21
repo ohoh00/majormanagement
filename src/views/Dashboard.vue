@@ -2,7 +2,7 @@
     <b-container>
     <div>
         <Cardbox />
-        <p></p>
+        <br>
         <Chartsbox />
     </div>
     </b-container>

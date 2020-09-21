@@ -5,7 +5,7 @@
             Drop excel file here or
         <button type="button" class='btn btn-primary' style="margin-left:16px;" size="mini" @click="handleUpload">Browse</button>
         </div>
-        <p></p>
+        <br>
         <Popup :excelDatas="excelData.results" :excelKey="excelData.header"/>
     </div>
 </template>

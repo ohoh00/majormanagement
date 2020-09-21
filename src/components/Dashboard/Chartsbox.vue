@@ -1,7 +1,6 @@
 <template>
- 
    <div id="chart" class="card">
-        <apexchart type="bar" height="350" :options="chartOptions" :series="series"></apexchart>
+        <apexchart type="bar" height="1350" :options="chartOptions" :series="series"></apexchart>
     </div>
 </template>
 
@@ -9,56 +8,52 @@
 export default {
     data () {
         return {
-              series: [{
-            name: 'Net Profit',
-            data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
+             series: [{
+            name: 'GradePoint ต่ำสุด',
+            data: [44, 55, 41, 64, 22, 43, 21, 26, 36, 20, 90,44, 55, 41, 64, 22, 43, 21, 26, 36]
           }, {
-            name: 'Revenue',
-            data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
-          }, {
-            name: 'Free Cash Flow',
-            data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
-          }],
+            name: 'GradePoint สูงสุด',
+            data: [53, 32, 33, 52, 13, 44, 32, 25, 36, 87, 15,44, 55, 41, 64, 22, 43, 21, 26, 36]
+          },
+          {
+            name: 'GradePoint เฉลี่ย',
+            data: [53, 32, 33, 52, 13, 44, 32, 25, 36, 87, 15,44, 55, 41, 64, 22, 43, 21, 26, 36]
+          }
+          ],
           chartOptions: {
             chart: {
               type: 'bar',
-              height: 350
+              height: 1000
             },
             plotOptions: {
               bar: {
-                horizontal: false,
-                columnWidth: '55%',
-                endingShape: 'rounded'
-              },
+                horizontal: true,
+                dataLabels: {
+                  position: 'top',
+                },
+              }
             },
             dataLabels: {
-              enabled: false
+              enabled: true,
+              offsetX: -6,
+              style: {
+                fontSize: '12px',
+                colors: ['#fff']
+              }
             },
             stroke: {
               show: true,
-              width: 2,
-              colors: ['transparent']
+              width: 1,
+              colors: ['#fff']
             },
             xaxis: {
-              categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+              categories: ['South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy', 'France', 'Japan',
+                'United States', 'China', 'Germany','South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy', 'France', 'Japan',
+                'United States', 'China', 'Germany'
+              ],
             },
-            yaxis: {
-              title: {
-                text: '$ (thousands)'
-              }
-            },
-            fill: {
-              opacity: 1
-            },
-            tooltip: {
-              y: {
-                formatter: function (val) {
-                  return "$ " + val + " thousands"
-                }
-              }
-            }
           },
-        }
+      }
     }
 }
 </script>

@@ -94,10 +94,10 @@ export default {
           MinGradepoint: this.Min_Gp(),
           Openmajor: this.Openmajor(),
           Numberonemajor: this.NumberOneMajor()
-
         })
         .then(() => {
             console.log('Document successfully written!')
+            this.$refs['my-modal'].hide()
           })
         .catch((error) => {
             console.error('Error writing document: ', error)

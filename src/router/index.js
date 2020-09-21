@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import uploadexcel from '../views/upload-excel.vue'
 import dashboard from '../views/Dashboard.vue'
 import read from '../components/Readdatatest.vue'
-
+import majorsetting from '../views/Majorsetting.vue'
 
 Vue.use(VueRouter)
 
@@ -19,10 +19,15 @@ Vue.use(VueRouter)
     component: uploadexcel
   },
   {
-    path: '/read',
-    name: 'read',
+    path: '/test',
+    name: 'test',
     component: read
   }, 
+  {
+    path: '/setting',
+    name: majorsetting,
+    component: majorsetting
+  }
   
 ]
 

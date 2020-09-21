@@ -81,16 +81,18 @@ export default {
                 this.data = docs.data()
             })
         },
-        async Getdockey() {
-                const snapshot = await db.collection('Dashboard').get()
-                console.log(snapshot.docs.map(doc => doc.id))
-                this.listyear = snapshot.docs.map(doc => doc.id)
-                console.log(this.listyear)
+        Getdockey() {
+                db.collection('Dashboard').get().then((snapshot) => {
+                snapshot.forEach(docs => {
+                    this.listyear.push(docs.id)
+                });
                 this.selected = this.listyear[this.listyear.length - 1]
+                console.log(this.listyear)
                 this.Readdata()
+            })
         }
     },
-    mounted() {   
+    created() {   
         this.Getdockey()
     }
 }
