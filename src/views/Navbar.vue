@@ -9,7 +9,7 @@
       <b-navbar-nav>
         <b-nav-item href="/">Dashboard</b-nav-item>
         <b-nav-item href="/uploadexcel">Upload Excel</b-nav-item>
-        <b-nav-item href="/">จัดสาขา</b-nav-item>
+        <b-nav-item href="/management">จัดสาขา</b-nav-item>
         <b-nav-item href="/setting">ตั้งค่า</b-nav-item>
         <b-nav-item href="/test">Test</b-nav-item>
       </b-navbar-nav>

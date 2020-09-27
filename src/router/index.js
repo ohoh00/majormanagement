@@ -4,6 +4,7 @@ import uploadexcel from '../views/upload-excel.vue'
 import dashboard from '../views/Dashboard.vue'
 import read from '../components/Readdatatest.vue'
 import majorsetting from '../views/Majorsetting.vue'
+import management from '../views/Management.vue'
 
 Vue.use(VueRouter)
 
@@ -27,7 +28,12 @@ Vue.use(VueRouter)
     path: '/setting',
     name: majorsetting,
     component: majorsetting
-  }
+  },
+  {
+    path: '/management',
+    name: management,
+    component: management
+  },
   
 ]
 

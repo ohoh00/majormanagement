@@ -34,7 +34,7 @@
                 </div>
             </div>
         </div>
-        <p></p>
+        <br>
         <div class="row">
             <div class="col-sm-4">
                 <div class="card" style="width: 18rem;">
@@ -67,6 +67,7 @@
 <script>
 import firebase from '@/firebaseConfig'
 const db = firebase.firestore()
+
 export default {
     data () {
         return {
@@ -79,7 +80,8 @@ export default {
         Readdata() {
             db.collection("Dashboard").doc(this.selected).get().then((docs) =>{
                 this.data = docs.data()
-            })
+            });
+            this.$emit('Sendyear', this.selected)
         },
         Getdockey() {
                 db.collection('Dashboard').get().then((snapshot) => {
@@ -92,7 +94,7 @@ export default {
             })
         }
     },
-    created() {   
+    mounted() {   
         this.Getdockey()
     }
 }

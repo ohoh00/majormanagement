@@ -12,8 +12,6 @@
 
 <script>
 import XLSX from 'xlsx'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
 import Popup from '@/components/UploadExcel/Popup.vue'
 export default {
   components: { Popup },

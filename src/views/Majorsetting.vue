@@ -1,31 +1,34 @@
 <template>
 <b-container>
     <div>
-        <Managebutton :datamajor="Datacodemajor"/>
+        <Addmajorbutton :datamajor="Datacodemajor" :datas="datas"/>
         <br>
-        <Datatable :datamajor="Datacodemajor" :datas="datas"/>
+        <Datatable :datamajor="Datacodemajor" :datas="datas" :docid="id"/>
     </div>
 </b-container>
 </template>
 <script>
 import Datatable from '@/components/Setting/Datatable.vue'
-import Managebutton from '@/components/Setting/Managebutton.vue'
+import Addmajorbutton from '@/components/Setting/Addmajorbutton.vue'
 import firebase from '@/firebaseConfig'
 const db = firebase.firestore()
 export default {
-    components:{Datatable, Managebutton},
+    components:{Datatable, Addmajorbutton},
     data() {
         return{
-            datas: []
+            datas: [],
+            id:[]
         }
     },
     methods: {
         Datacodemajor() {
             this.datas = []
+            this.id = []
             db.collection('Settingcode').orderBy('Code', "asc").get().then((snapshot) => {
                 snapshot.forEach(docs => {
                     console.log(docs.data())
                     this.datas.push(docs.data())
+                    this.id.push(docs.id)
                 });
             })
         },

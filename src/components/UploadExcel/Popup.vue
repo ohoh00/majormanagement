@@ -3,7 +3,7 @@
     <b-container fluid class="text-light text-center">
     <b-row>
       <b-col>
-     <b-button id="show-btn" @click="$bvModal.show('bv-modal-example')">บันทึกข้อมูล</b-button>
+     <b-button variant="danger" @click="$bvModal.show('bv-modal-example')">บันทึกข้อมูล</b-button>
      </b-col>
     </b-row>
     </b-container>
@@ -12,26 +12,21 @@
     <template v-slot:modal-title>
     บันทึกข้อมูล
     </template>
-    <div class="d-block text-center">
-     <b-form-input v-model="form.year" placeholder="ปีการศึกษา"></b-form-input>
+    <div class="text-center">
+     <h4 class="text-center">ต้องการที่จะบันทึกข้อมูลกดปุ่ม<b-badge>ยืนยัน</b-badge></h4>
     </div>
     <b-row>
     <b-col>
-      <b-button class="mt-3" block @click="$bvModal.hide('bv-modal-example')">Close Me</b-button>
+      <b-button class="mt-3" variant="danger" block @click="$bvModal.hide('bv-modal-example')">ยกเลิก</b-button>
     </b-col>
     <b-col>
-      <b-button class="mt-3" block  @click="Datadashboard()" >SAVE</b-button>
-    </b-col>
-    <b-col>
-      <b-button class="mt-3" block  @click="NumberOneMajor()" >Data</b-button>
+      <b-button class="mt-3" variant="success" block  @click="Delaydata()">ยืนยัน</b-button>
     </b-col>
     </b-row>
     </b-modal>
   </div>
 </template>
 <script>
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
 import firebase from '@/firebaseConfig'
 const db = firebase.firestore()
 export default {
@@ -41,51 +36,40 @@ export default {
   },
     data (){
       return {
-        form: {
-          year: ''
-        },
+        datas: []
       }
     },
   methods: {
-      /*Delaydata () {
-        console.log(this.excelDatas.length)
-        this.excelDatas.forEach(element => {
-        console.log(element.NAME)
-        });
+      Delaydata() {
         var i
         var data = []
         var j = 0
-        //var num = 0
+        var num = 0
         this.$refs['my-modal'].hide()
         if(this.excelDatas.length < 100){
-        //this.createData(this.excelDatas,num)
+        this.createData(this.excelDatas,num)
         }
         else if(this.excelDatas.length >= 100){
         for(i = 0; i < this.excelDatas.length; i++){
           data[j++] = this.excelDatas[i]
         if(j == 100 || i+1 == this.excelDatas.length){
-          //this.createData(data,num)
+          this.createData(data,num)
           data = []
           j = 0
-          //num++
+          num++
           }   
         }
       }
     },
-      createData(Datas,num) {
-        db.collection('Students').doc('Years').collection(this.form.year).doc(`Set${num}`)
-          .set({Datas})
+    createData(Datas,num) {
+        db.collection('Manage').doc(`Set${num}`).set({Datas})
           .then(() => {
             console.log('Document successfully written!')
           })
           .catch((error) => {
             console.error('Error writing document: ', error)
-          })
+        })
     },
-      DeleteData() {
-        db.collection("Students").doc("Year").delete()
-        this.$refs['my-modal'].hide()
-    },*/
     Datadashboard() {
         db.collection("Dashboard").doc(this.form.year).set({
           Students: this.excelDatas.length,
@@ -135,8 +119,16 @@ export default {
 
         return max_gp
     },
+    Readdatasetting() {
+      this.datas = []
+      db.collection('Settingcode').orderBy('Code', "asc").get().then((snapshot) => {
+        snapshot.forEach(docs => {
+          this.datas.push(docs.data())
+        });
+      })
+    },
     NumberOneMajor() {
-      var data = [{
+      /*var data = [{
           num: 701,
           ma: 'วิศวกรรมไฟฟ้า'
         },
@@ -148,12 +140,12 @@ export default {
           num: 703,
           ma: 'วิศวกรรมเคมี'
         }
-      ]
+      ]*/
       var k = []
-      for(let i = 0; i < data.length; i++){
+      for(let i = 0; i < this.datas.length; i++){
         var n = 0
         for(let j = 0; j < this.excelDatas.length; j++){
-          if(this.excelDatas[j].ลำดับ1 == data[i].num)
+          if(this.excelDatas[j].ลำดับ1 == this.datas[i].Code)
           n++
         }
         k[i] = n
@@ -161,8 +153,8 @@ export default {
       var g = Math.max(...k)
       //ใส่ ... ไว้เพื่อที่จะสามารถใช้ Math.max กับ array ได้
       var index =  k.indexOf(g)
-      console.log(data[index].ma)
-      return data[index].ma
+      console.log(this.datas[index].Major)
+      //return data[index].ma
     },
     Openmajor() {
         var num = 0
@@ -173,7 +165,10 @@ export default {
         console.log(num)
         return num
     }
-  }
+  },
+  /*mounted() {
+    this.Readdatasetting()
+  }*/
 }
 </script>
 <style scoped>
