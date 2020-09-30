@@ -4,7 +4,8 @@
     <b-alert show class="text-center">ไม่มีข้อมูล</b-alert>
   </div>
   <div>
-    <b-table striped hover :items="Managedatas" :fields="Datakey"></b-table>
+    <b-table striped hover :items="Managedatas" :fields="Datakey" :sort-by.sync="sortBy"
+      :sort-desc.sync="sortDesc" ></b-table>
   </div>
 </div>
 </template>
@@ -16,16 +17,16 @@ export default {
   },
   data() {
     return {
+      sortBy: 'GPAX',
+      sortDesc: true,
     }
   },
   methods:{
     Setstatus() {
-      if(this.Managedatas == ""){
+      if(this.Managedatas == "")
       return true
-      }
-      else{
+      else
       return false
-      }
     }
   },
 }

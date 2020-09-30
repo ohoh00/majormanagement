@@ -3,7 +3,7 @@
     <div>
       <Managebutton :Readdata = 'documentsId'/>
       <br/>
-      <Listdatatable :Managedatas = 'datas' :Datakey = 'key'/>
+      <Listdatatable :Managedatas = 'datas' :Datakey = 'fields'/>
     </div>
   </b-container>
 </template>
@@ -17,7 +17,8 @@ export default {
   data() {
     return {
         datas: [],
-        key:[]
+        key:[],
+        fields: []
     };
   },
   methods: {
@@ -36,11 +37,23 @@ export default {
           snapshot.data().Datas.forEach((docs) => {
             this.datas.push(docs);
           });
-          console.log(Object.keys(this.datas[0]))
           this.key = Object.keys(this.datas[0])
           this.key = this.key.sort()
+          this.Sortdata(this.key)
         });
     },
+    Sortdata(keys) {
+      this.fields = []
+      var sortkey = new Object
+      keys.forEach(data => {
+        sortkey = {
+          key: data,
+          sortable: true
+        }
+        this.fields.push(sortkey)
+        console.log(this.fields)
+      });
+    }
   },
   mounted() {
     this.documentsId();
