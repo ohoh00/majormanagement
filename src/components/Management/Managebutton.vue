@@ -1,53 +1,86 @@
 <template>
-<div>
+  <div>
     <div>
-        <b-button variant="danger">จัดสาขาวิชา</b-button>
-        <b-button variant="info" style="margin-left:16px;" @click="$bvModal.show('bv-modal-example-delete')">ลบข้อมูล</b-button>
+      <b-button variant="danger" @click="Setdata_GP()">จัดสาขาวิชา</b-button>
     </div>
 
-    <div>
-        <b-modal ref="my-modal-delete" id="bv-modal-example-delete" hide-footer title="ลบข้อมูล">
-            <div>
-                <h4 class="text-center">ต้องการที่จะลบข้อมูลกดปุ่ม<b-badge>ยืนยัน</b-badge></h4>
-            </div>
-            <div class="row">
-            <div class="col-sm-6">
-                <b-button class="mt-3" variant="danger" block @click="$bvModal.hide('bv-modal-example-delete')">ยกเลิก</b-button>
-            </div>
-            <div class="col-sm-6">
-                <b-button class="mt-3" variant="success" block @click="ManageId()">ยืนยัน</b-button>
-            </div>
-            </div>
-            </b-modal>
-    </div>
-</div>
+  </div>
 </template>
 <script>
 import firebase from '@/firebaseConfig'
 const db = firebase.firestore()
 export default {
-    props:{
-        Readdata: Function
+  props: {
+    Managedatas: Array,
+    Datakey: Array,
+  },
+  data() {
+    return {
+        Gradepoint: [],
+    };
+  },
+  methods: {
+    Setdata_GP() {
+        this.Gradepoint = []
+        this.Managedatas.forEach(data => {
+            this.Gradepoint.push(data.GRADEPOINT)
+        });
+        this.Max_GP()
+        this.Min_GP()
+        this.Average_Gp()
+        this.Openmajor()
+        this.NumberOneMajor()
     },
-    methods:{
-        ManageId() {
-            this.datas = [];
-            db.collection("Manage").get().then((snapshot) => {
-                snapshot.forEach((docs) => {
-                this.Deletedata(docs.id);
-                });
-            });
-        },
-        Deletedata(id) {
-            db.collection("Manage").doc(id).delete()
-            .then(() => {
-                console.log('Delete Document successfully')
-                this.Readdata()
-                this.$refs['my-modal-delete'].hide()
-            }).catch((error) => {
-                console.error('Error writing document: ', error)
-            });
+
+    Max_GP() {
+        console.log('MAX = ' + Math.max(...this.Gradepoint))
+        return Math.max(...this.Gradepoint)
+    },
+
+    Min_GP() {
+        console.log('MIN = ' + Math.min(...this.Gradepoint))
+        return Math.min(...this.Gradepoint)
+    },
+
+    Average_Gp() {
+        var average_gp = 0
+        this.Gradepoint.forEach(data => {
+            average_gp = average_gp + data
+        });
+        average_gp = average_gp/this.Gradepoint.length
+        console.log('average = '+ average_gp.toFixed( 2 ))
+        return average_gp.toFixed( 2 )
+    },
+
+    Openmajor() {
+        var num = 0
+        for(let i = 1; i < this.Datakey.length; i++){
+          if(this.Datakey.includes(`ลำดับ${i}`))
+          num++
         }
-    }
-}
+        console.log('จำนวนสาขา = '+num)
+        return num
+    },
+    NumberOneMajor() {
+      var datas = []
+      db.collection('Settingcode').orderBy('Code', "asc").get().then((snapshot) => {
+        snapshot.forEach(docs => {
+          datas.push(docs.data())
+        });
+        var max_major = []
+        for(let i = 0; i < datas.length; i++){
+        var count = 0
+            for(let j = 0; j < this.Managedatas.length; j++){
+                if(this.Managedatas[j].ลำดับ1 == datas[i].Code)
+                count++
+            }
+        max_major[i] = count
+        }
+        var index =  max_major.indexOf(Math.max(...max_major))
+        console.log('สาขาเลือกมากสุด = '+datas[index].Major)
+        return datas[index].Major
+      })
+    },
+  },
+};
 </script>

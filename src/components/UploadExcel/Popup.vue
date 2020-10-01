@@ -128,19 +128,6 @@ export default {
       })
     },
     NumberOneMajor() {
-      /*var data = [{
-          num: 701,
-          ma: 'วิศวกรรมไฟฟ้า'
-        },
-        {
-          num: 702,
-          ma: 'วิศวกรรมคอมพิวเตอร์'
-        },
-        {
-          num: 703,
-          ma: 'วิศวกรรมเคมี'
-        }
-      ]*/
       var k = []
       for(let i = 0; i < this.datas.length; i++){
         var n = 0

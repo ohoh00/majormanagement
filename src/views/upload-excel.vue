@@ -2,7 +2,8 @@
   <div>
     <UploadExcelComponent :onSuccess="handleSuccess" :beforeUpload="beforeUpload" />
     <!--การส่งpropผ่านไปยังcomponentอื่นอีกแบบ <upload-excel-component :on-success="handleSuccess" :before-upload="beforeUpload" /> -->
-    <b-table striped hover style="width: 100%;margin-top:20px;" :items="tableData" :fields="tableHeader"></b-table>
+    <br/>
+    <b-table striped hover head-variant = 'dark' :items="tableData" :fields="tableHeader" sticky-header="600px"></b-table>
   </div>
 </template>
 

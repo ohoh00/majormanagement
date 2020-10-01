@@ -1,7 +1,12 @@
 <template>
   <b-container>
     <div>
-      <Managebutton :Readdata = 'documentsId'/>
+      <b-container>
+      <div class="row">
+      <Managebutton :Managedatas = 'datas' :Datakey = 'key'/>
+      <Deletebutton :data = 'documentsId'/>
+      </div>
+      </b-container>
       <br/>
       <Listdatatable :Managedatas = 'datas' :Datakey = 'fields'/>
     </div>
@@ -10,10 +15,11 @@
 <script>
 import Listdatatable from "@/components/Management/ListDataTable.vue";
 import Managebutton from "@/components/Management/Managebutton.vue";
+import Deletebutton from "@/components/Management/Deletebutton.vue";
 import firebase from "@/firebaseConfig";
 const db = firebase.firestore();
 export default {
-  components: { Listdatatable, Managebutton },
+  components: { Listdatatable, Managebutton, Deletebutton },
   data() {
     return {
         datas: [],
@@ -25,6 +31,7 @@ export default {
     documentsId() {
       this.datas = []
       this.key = []
+      this.fields = []
       db.collection("Manage").get().then((snapshot) => {
           snapshot.forEach((docs) => {
             this.Readdata(docs.id);
@@ -51,7 +58,6 @@ export default {
           sortable: true
         }
         this.fields.push(sortkey)
-        console.log(this.fields)
       });
     }
   },
