@@ -16,7 +16,8 @@
         :sort-by.sync="sortBy"
         :sort-desc.sync="sortDesc"
         sticky-header="600px"
-      ></b-table>
+      >
+      </b-table>
     </div>
   </div>
 </template>
