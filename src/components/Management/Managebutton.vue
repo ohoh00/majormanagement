@@ -1,7 +1,27 @@
 <template>
   <div>
     <div>
-      <b-button variant="danger" @click="Managemajor()">จัดสาขาวิชา</b-button>
+      <div>
+        <b-button variant="danger" @click="$bvModal.show('bv-modal-example-manage')">จัดสาขาวิชา</b-button>
+      </div>
+
+      <div>
+        <b-modal ref="my-modal-manage" id="bv-modal-example-manage" size="lg" hide-footer title="จัดสาขาวิชา">
+            <div>
+                <label>ปีการศึกษา</label>
+                <input type="text" class="form-control" v-model="year">
+            </div>
+            <div class="row">
+            <div class="col-sm-6">
+                <b-button class="mt-3" variant="danger" block @click="$bvModal.hide('bv-modal-example-manage')">ยกเลิก</b-button>
+            </div>
+            <div class="col-sm-6">
+                <b-button class="mt-3" variant="success" block @click="Setprocess()">ยืนยัน</b-button>
+            </div>
+            </div>
+            </b-modal>
+      </div>
+
     </div>
   </div>
 </template>
@@ -15,6 +35,7 @@ export default {
   },
   data() {
     return {
+      year: '',
       Gradepoint: [],
       datas: [],
       countmajor: [],
@@ -22,6 +43,73 @@ export default {
     };
   },
   methods: {
+    Setprocess() {
+      this.Setdata_GP()
+      this.Dashboardcard()
+      this.Delaydata()
+      this.Chartdata()
+      this.$refs['my-modal-manage'].hide()
+    },
+    Dashboardcard() {
+      db.collection("Dashboard").doc(this.year).set({
+          Students: this.Managedatas.length,
+          AverageGradepoint: this.Average_Gp(),
+          MaxGradepoint: this.Max_GP(),
+          MinGradepoint: this.Min_GP(),
+          Openmajor: this.Openmajor(),
+          Numberonemajor: this.NumberOneMajor()
+        })
+        .then(() => {
+            console.log('Dashboardcard successfully written!')
+          })
+        .catch((error) => {
+            console.error('Error writing document: ', error)
+        })
+    },
+    Dashboardchart(max, min, average, major) {
+      db.collection("Dashboard").doc(this.year).collection('Chart').add({
+        Gpav: average,
+        Gpmax: max,
+        Gpmin: min,
+        Major: major
+      })
+      .then(() => {
+            console.log('chart successfully written!')
+          })
+      .catch((error) => {
+            console.error('Error writing document: ', error)
+        })
+    },
+    Delaydata() {
+        this.Managemajor()
+        var i
+        var data = []
+        var j = 0
+        var num = 0
+        if(this.students.length < 100){
+        this.Studentsmajor(this.students,num)
+        }
+        else if(this.students.length >= 100){
+        for(i = 0; i < this.students.length; i++){
+          data[j++] = this.students[i]
+        if(j == 100 || i+1 == this.students.length){
+          this.Studentsmajor(data,num)
+          data = []
+          j = 0
+          num++
+          }   
+        }
+      }
+    },
+    Studentsmajor(Datas,num) {
+      db.collection("Students").doc(this.year).collection('data').doc(`Set${num}`).set({Datas})
+      .then(() => {
+            console.log('Document successfully written!')
+        })
+          .catch((error) => {
+            console.error('Error writing document: ', error)
+        })
+    },
     Readdatasetting() {
       this.datas = [];
       db.collection("Settingcode").orderBy("Code", "asc").get()
@@ -36,11 +124,6 @@ export default {
       this.Managedatas.forEach((data) => {
         this.Gradepoint.push(data.GRADEPOINT);
       });
-      this.Max_GP();
-      this.Min_GP();
-      this.Average_Gp();
-      this.Openmajor();
-      this.NumberOneMajor();
     },
     Max_GP() {
       console.log("MAX = " + Math.max(...this.Gradepoint));
@@ -95,9 +178,7 @@ export default {
       for (var j = 1; j <= this.countmajor.length; j++) {
         for (var k = 0; k < this.datas.length; k++) {
           if (this.Managedatas[i][`ลำดับ${j}`] == this.datas[k].Code && this.countmajor[k] < this.datas[k].จำนวนรับ) {
-            //console.log(`i = ${i} , ลำดับ${j}`);
-            //console.log(this.Managedatas[i].NAME);
-            console.log(this.datas[k].Major);
+            //console.log(this.datas[k].Major);
             managestu = {
               STUDENTCODE: this.Managedatas[i].STUDENTCODE,
               NAME: this.Managedatas[i].NAME,
@@ -106,9 +187,8 @@ export default {
               ลำดับที่ได้:(`ลำดับ${j}`),
               สาขาวิชา: this.datas[k].Major
             }
-            //console.log(managestu)
             this.students.push(managestu)
-            console.log(this.students[i])
+            //console.log(this.students[i])
             i++;
             j = 0;
             this.countmajor[k]++;
@@ -118,6 +198,45 @@ export default {
         if (i == this.Managedatas.length) break;
       }
     },
+    Chartdata() {
+      for(var i = 0; i<this.datas.length; i++){
+        var result = this.students.filter((data) => {
+        console.log(this.datas[i].Major)
+        return data.สาขาวิชา == this.datas[i].Major
+        })
+        var max = this.Chartmax(result)
+        var min = this.Chartmin(result)
+        var average = this.Chartaverage(result)
+        this.Dashboardchart(max, min, average, this.datas[i].Major)
+      }
+    },
+    Chartmax(result) {
+      var max = result[0].GRADEPOINT
+      result.forEach(e => {
+          if(e.GRADEPOINT > max)
+          max = e.GRADEPOINT
+      })
+      //console.log(max)
+      return max
+    },
+    Chartmin(result) {
+      var min = result[0].GRADEPOINT
+        result.forEach(e => {
+          if(e.GRADEPOINT < min)
+          min = e.GRADEPOINT
+        })
+      //console.log(min)
+      return min
+    },
+    Chartaverage(result) {
+      var average = 0;
+      result.forEach((data) => {
+        average = average + data.GRADEPOINT;
+      });
+      average = average / result.length;
+      //console.log("average = " + average.toFixed(2));
+      return average.toFixed(2)
+    }
   },
   mounted() {
     this.Readdatasetting();

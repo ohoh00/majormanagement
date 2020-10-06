@@ -7,10 +7,7 @@
       >ไม่มีข้อมูล</b-alert>
     </div>
     <div>
-      <b-table
-        striped
-        hover
-        head-variant = 'dark'
+      <b-table striped hover head-variant = 'dark'
         :items="Managedatas"
         :fields="Datakey"
         :sort-by.sync="sortBy"

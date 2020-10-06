@@ -2,9 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import uploadexcel from '../views/upload-excel.vue'
 import dashboard from '../views/Dashboard.vue'
-import read from '../components/Readdatatest.vue'
 import majorsetting from '../views/Majorsetting.vue'
 import management from '../views/Management.vue'
+import students from '../views/Students.vue'
 
 Vue.use(VueRouter)
 
@@ -20,19 +20,19 @@ Vue.use(VueRouter)
     component: uploadexcel
   },
   {
-    path: '/test',
-    name: 'test',
-    component: read
-  }, 
-  {
     path: '/setting',
-    name: majorsetting,
+    name: 'majorsetting',
     component: majorsetting
   },
   {
     path: '/management',
-    name: management,
+    name: 'management',
     component: management
+  },
+  {
+    path: '/students',
+    name: 'students',
+    component: students
   },
   
 ]

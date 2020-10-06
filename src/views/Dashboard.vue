@@ -74,10 +74,7 @@ export default {
       this.namelabel = []
       this.gpmin = []
       this.gpmax = []
-      db.collection("Chart")
-        .doc(this.year)
-        .collection("data")
-        .get()
+      db.collection("Dashboard").doc(this.year).collection("Chart").orderBy("Gpmax", "desc").get()
         .then((snapshot) => {
           snapshot.forEach((docs) => {
             this.namelabel.push(docs.data().Major)
