@@ -1,70 +1,81 @@
 <template>
   <div>
     <b-container fluid class="text-light text-center">
-    <b-row>
-      <b-col>
-     <b-button variant="danger" @click="$bvModal.show('bv-modal-example')">บันทึกข้อมูล</b-button>
-     </b-col>
-    </b-row>
+      <b-row>
+        <b-col>
+          <b-button variant="danger" @click="$bvModal.show('bv-modal-example')">บันทึกข้อมูล </b-button>
+        </b-col>
+      </b-row>
     </b-container>
 
-  <b-modal ref="my-modal" id="bv-modal-example" hide-footer>
-    <template v-slot:modal-title>
-    บันทึกข้อมูล
-    </template>
-    <div class="text-center">
-     <h4 class="text-center">ต้องการที่จะบันทึกข้อมูลกดปุ่ม<b-badge>ยืนยัน</b-badge></h4>
-    </div>
-    <b-row>
-    <b-col>
-      <b-button class="mt-3" variant="danger" block @click="$bvModal.hide('bv-modal-example')">ยกเลิก</b-button>
-    </b-col>
-    <b-col>
-      <b-button class="mt-3" variant="success" block  @click="Delaydata()">ยืนยัน</b-button>
-    </b-col>
-    </b-row>
+    <b-modal ref="my-modal" id="bv-modal-example" hide-footer>
+        <template v-slot:modal-title>
+          บันทึกข้อมูล
+        </template>
+        <div class="text-center">
+          <h4 class="text-center">ต้องการที่จะบันทึกข้อมูลกดปุ่ม<b-badge>ยืนยัน</b-badge>
+          </h4>
+        </div>
+        <b-row>
+          <b-col>
+            <b-button class="mt-3" variant="danger" block @click="$bvModal.hide('bv-modal-example')">ยกเลิก</b-button>
+          </b-col>
+          <b-col>
+            <b-button class="mt-3" variant="success" block @click="Delaydata()">ยืนยัน</b-button>
+          </b-col>
+        </b-row>
     </b-modal>
+    
   </div>
 </template>
 <script>
-import firebase from '@/firebaseConfig'
-const db = firebase.firestore()
+import firebase from "@/firebaseConfig";
+const db = firebase.firestore();
 export default {
   props: {
     excelDatas: Array,
-    excelKey: Array
+    excelKey: Array,
+  },
+  data() {
+    return{
+      show: false
+    }
   },
   methods: {
-      Delaydata() {
-        var i
-        var data = []
-        var j = 0
-        var num = 0
-        this.$refs['my-modal'].hide()
-        if(this.excelDatas.length < 100){
-        this.createData(this.excelDatas,num)
-        }
-        else if(this.excelDatas.length >= 100){
-        for(i = 0; i < this.excelDatas.length; i++){
-          data[j++] = this.excelDatas[i]
-        if(j == 100 || i+1 == this.excelDatas.length){
-          this.createData(data,num)
-          data = []
-          j = 0
-          num++
-          }   
+    Delaydata() {  
+      var i;
+      var data = [];
+      var j = 0;
+      var num = 0;
+      this.$refs['my-modal'].hide()
+      if (this.excelDatas.length < 100) {
+        this.createData(this.excelDatas, num);
+      } 
+      else if (this.excelDatas.length >= 100) {
+        for (i = 0; i < this.excelDatas.length; i++) {
+          data[j++] = this.excelDatas[i];
+          if (j == 100 || i + 1 == this.excelDatas.length) {
+            this.createData(data, num);
+            data = [];
+            j = 0;
+            num++;
+          }
+          this.show = true
         }
       }
+      this.show = false
     },
-    createData(Datas,num) {
-        db.collection('Manage').doc(`Set${num}`).set({Datas})
-          .then(() => {
-            console.log('Document successfully written!')
-          })
-          .catch((error) => {
-            console.error('Error writing document: ', error)
+    createData(Datas, num) {
+      db.collection("Manage")
+        .doc(`Set${num}`)
+        .set({ Datas })
+        .then(() => {
+          console.log("Document successfully written!");
         })
+        .catch((error) => {
+          console.error("Error writing document: ", error);
+        });
     },
-  }
-}
+  },
+};
 </script>

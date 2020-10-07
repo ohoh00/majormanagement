@@ -1,7 +1,6 @@
 <template>
   <div>
     <UploadExcelComponent :onSuccess="handleSuccess" :beforeUpload="beforeUpload" />
-    <!--การส่งpropผ่านไปยังcomponentอื่นอีกแบบ <upload-excel-component :on-success="handleSuccess" :before-upload="beforeUpload" /> -->
     <br/>
     <b-table striped hover head-variant = 'dark' :items="tableData" :fields="tableHeader" sticky-header="600px"></b-table>
   </div>
@@ -9,8 +8,6 @@
 
 <script>
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
 export default {
   name: 'UploadExcel',
   components: { UploadExcelComponent },
@@ -18,6 +15,7 @@ export default {
     return {
       tableData: [],
       tableHeader: [],
+      show: false
     }
   },
   methods: {
@@ -37,10 +35,6 @@ export default {
     handleSuccess ({ results, header }) {
       this.tableData = results
       this.tableHeader = header
-      /*results.forEach(l => {
-        console.log(l.ลำดับ1)
-      });*/
-      //console.log(`results = ${JSON.stringify(results.NAME)}`)
     }
   }
 }

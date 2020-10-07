@@ -1,10 +1,7 @@
 <template>
   <div>
     <div v-if="Setstatus()">
-      <b-alert
-        show
-        class="text-center"
-      >ไม่มีข้อมูล</b-alert>
+      <b-alert show class="text-center">ไม่มีข้อมูล</b-alert>
     </div>
     <div>
       <b-table striped hover head-variant = 'dark'

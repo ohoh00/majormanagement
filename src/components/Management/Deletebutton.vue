@@ -30,7 +30,6 @@ export default {
     },
     methods:{
         ManageId() {
-            this.datas = [];
             db.collection("Manage").get().then((snapshot) => {
                 snapshot.forEach((docs) => {
                 this.Deletedata(docs.id);
