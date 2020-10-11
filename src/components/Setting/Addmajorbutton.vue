@@ -1,6 +1,6 @@
 <template>
 <b-container>
-    <div class="row">
+    <div>
         <div>
         <b-button variant="danger" id="show-btn" @click="$bvModal.show('bv-modal-example-add')">เพิ่มสาขา</b-button>
 
@@ -29,10 +29,6 @@
         </div>
         </b-modal>
         </div>
-        
-        <div>
-        <!--b-button variant="success" style="margin-left:16px;">ลบสาขา</b-button-->
-        </div>
     </div>
 </b-container>
 </template>
@@ -47,9 +43,9 @@ export default {
     data(){
         return{
             majorfrom:{
-                Code:null,
+                Code:'',
                 Major:'',
-                จำนวนรับ:null
+                จำนวนรับ:''
             }
         }
     },
@@ -63,16 +59,22 @@ export default {
             sum ? this.Majorfrom() : alert('Code ซ้ำ')
         },
         Majorfrom() {
-            db.collection('Settingcode').add(this.majorfrom)
+            db.collection('Setting').doc('Major').collection('Data').add(this.majorfrom)
             .then(() => {
                 console.log('Document successfully written!')
                 this.$refs['my-modal'].hide()
                 this.datamajor()
+                this.Clear()
             })
             .catch((error) => {
                 console.error('Error writing document: ', error)
           })
         },
+        Clear() {
+            this.majorfrom.Code = ''
+            this.majorfrom.Major = ''
+            this.majorfrom.จำนวนรับ = ''
+        }
     }
 }
 </script>

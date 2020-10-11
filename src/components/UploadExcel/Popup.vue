@@ -36,11 +36,6 @@ export default {
     excelDatas: Array,
     excelKey: Array,
   },
-  data() {
-    return{
-      show: false
-    }
-  },
   methods: {
     Delaydata() {  
       var i;
@@ -60,10 +55,8 @@ export default {
             j = 0;
             num++;
           }
-          this.show = true
         }
       }
-      this.show = false
     },
     createData(Datas, num) {
       db.collection("Manage")

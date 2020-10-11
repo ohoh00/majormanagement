@@ -1,8 +1,10 @@
 <template>
   <div id="app">
+    <div v-if="main()">
     <Navbar/>
-    <p></p>
-    <router-view></router-view>
+    <br>
+    </div>
+    <router-view/>
   </div>
 </template>
 
@@ -10,7 +12,20 @@
 import Navbar from '@/views/Navbar.vue'
 export default {
   name: 'App',
-  components : {Navbar,}
+  components:{Navbar,},
+  data() {
+    return{
+      user:''
+    }
+  },
+  methods:{
+    main(){
+      if(this.$route.path == '/')
+      return false
+      else
+      return true
+    }
+  }
 }
 </script>
 

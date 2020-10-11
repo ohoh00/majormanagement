@@ -112,7 +112,7 @@ export default {
     },
     Readdatasetting() {
       this.datas = [];
-      db.collection("Settingcode").orderBy("Code", "asc").get()
+      db.collection('Setting').doc('Major').collection('Data').orderBy("Code", "asc").get()
         .then((snapshot) => {
           snapshot.forEach((docs) => {
             this.datas.push(docs.data());

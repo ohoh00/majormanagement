@@ -22,7 +22,7 @@ export default {
       gpmin: [],
       gpmax: [],
       gpav: [],
-      myChart: null
+      myChart: null,
     }
   },
   methods: {
@@ -86,11 +86,17 @@ export default {
         });
     },
     test() {
-      console.log(this.namelabel);
+      firebase.auth().onAuthStateChanged((user) => {
+        console.log(user)
+    });
     },
+  },
+  beforeCreate() {
+    firebase.auth().onAuthStateChanged(user => {
+        if (!user) {
+          this.$router.replace("/")
+        }
+    });
   },
 }
 </script>
-
-<style scoped>
-</style>

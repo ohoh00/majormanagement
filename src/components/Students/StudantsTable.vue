@@ -1,9 +1,6 @@
 <template>
   <div>
-    <b-table
-      striped
-      hover
-      head-variant='dark'
+    <b-table striped hover head-variant='dark'
       :items="Studentsdatas"
       :fields="Datakey"
       :sort-by.sync="sortBy"

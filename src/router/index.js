@@ -5,12 +5,19 @@ import dashboard from '../views/Dashboard.vue'
 import majorsetting from '../views/Majorsetting.vue'
 import management from '../views/Management.vue'
 import students from '../views/Students.vue'
+import login from '../views/Login.vue'
+import adduser from '../views/Adduser.vue' 
 
 Vue.use(VueRouter)
 
   const routes = [
   {
     path: '/',
+    name: 'login',
+    component: login
+  },
+  {
+    path: '/dashboard',
     name: 'dashboard',
     component: dashboard
   },
@@ -34,7 +41,12 @@ Vue.use(VueRouter)
     name: 'students',
     component: students
   },
-  
+  {
+    path: '/adduser',
+    name: 'adduser',
+    component: adduser
+  },
+ 
 ]
 
 const router = new VueRouter({

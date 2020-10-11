@@ -40,7 +40,7 @@
                     <input type="text" class="form-control" v-model="editname">
                 </b-col>  
                 <b-col>
-                    <label>ชื่อสาขาวิชา</label>
+                    <label>จำนวนรับ (คน)</label>
                     <input type="text" class="form-control" v-model.number="editnumber">
                 </b-col>  
             </div>
@@ -97,7 +97,7 @@ export default {
             this.id = index
         },
         Deletemajor() {
-            db.collection('Settingcode').doc(this.docid[this.id]).delete()
+            db.collection('Setting').doc('Major').collection('Data').doc(this.docid[this.id]).delete()
             .then(() => {
                 console.log('Delete Document successfully')
                 this.datamajor()
@@ -125,7 +125,7 @@ export default {
             sum ? this.Updatedata() : alert('Code ซ้ำ')
         },
         Updatedata() {
-            db.collection('Settingcode').doc(this.docid[this.id]).update({
+            db.collection('Setting').doc('Major').collection('Data').doc(this.docid[this.id]).update({
                 Code: this.editcode,
                 Major: this.editname,
                 จำนวนรับ: this.editnumber
