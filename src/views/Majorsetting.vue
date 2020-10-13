@@ -3,14 +3,14 @@
     <div>
         <div class="row">
             <div>
-                <Addmajorbutton :datamajor="Datacodemajor" :datas="datas"/>
+                <Addmajorbutton :datas="datas"/>
             </div>
             <div class="ml-auto">
                <Editfilterbutton/>
             </div>
         </div>
         <br>
-        <Datatable :datamajor="Datacodemajor" :datas="datas" :docid="id"/>
+        <Datatable :datas="datas" :docid="id"/>
     </div>
 </b-container>
 </template>
@@ -30,18 +30,17 @@ export default {
     },
     methods: {
         Datacodemajor() {
-            this.datas = []
-            this.id = []
-            db.collection('Setting').doc('Major').collection('Data').orderBy('Code', "asc").get().then((snapshot) => {
+            db.collection('Setting').doc('Major').collection('Data').orderBy('Code', "asc").onSnapshot(snapshot => {
+                this.datas = []
+                this.id = []
                 snapshot.forEach(docs => {
-                    console.log(docs.data())
                     this.datas.push(docs.data())
                     this.id.push(docs.id)
                 });
             })
         },
     },
-    mounted() {
+    created() {
         this.Datacodemajor()
     }
 }

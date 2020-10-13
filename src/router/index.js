@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import uploadexcel from '../views/upload-excel.vue'
-import dashboard from '../views/Dashboard.vue'
-import majorsetting from '../views/Majorsetting.vue'
-import management from '../views/Management.vue'
-import students from '../views/Students.vue'
-import login from '../views/Login.vue'
-import adduser from '../views/Adduser.vue' 
+const dashboard = () => import('@/views/Dashboard.vue')
+const uploadexcel = () => import('@/views/upload-excel.vue')
+const majorsetting = () => import('@/views/Majorsetting.vue')
+const management = () => import('@/views/Management.vue')
+const students = () => import('@/views/Students.vue')
+const login = () => import('@/views/Login.vue')
+const adduser = () => import('@/views/Adduser.vue')
 
 Vue.use(VueRouter)
 

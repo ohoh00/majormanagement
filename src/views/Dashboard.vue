@@ -85,11 +85,6 @@ export default {
           this.Chartdata()
         });
     },
-    test() {
-      firebase.auth().onAuthStateChanged((user) => {
-        console.log(user)
-    });
-    },
   },
   beforeCreate() {
     firebase.auth().onAuthStateChanged(user => {

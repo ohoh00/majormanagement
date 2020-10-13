@@ -178,7 +178,6 @@ export default {
       for (var j = 1; j <= this.countmajor.length; j++) {
         for (var k = 0; k < this.datas.length; k++) {
           if (this.Managedatas[i][`ลำดับ${j}`] == this.datas[k].Code && this.countmajor[k] < this.datas[k].จำนวนรับ) {
-            //console.log(this.datas[k].Major);
             managestu = {
               STUDENTCODE: this.Managedatas[i].STUDENTCODE,
               NAME: this.Managedatas[i].NAME,
@@ -188,7 +187,6 @@ export default {
               สาขาวิชา: this.datas[k].Major
             }
             this.students.push(managestu)
-            //console.log(this.students[i])
             i++;
             j = 0;
             this.countmajor[k]++;
@@ -216,7 +214,6 @@ export default {
           if(e.GRADEPOINT > max)
           max = e.GRADEPOINT
       })
-      //console.log(max)
       return max
     },
     Chartmin(result) {
@@ -225,7 +222,6 @@ export default {
           if(e.GRADEPOINT < min)
           min = e.GRADEPOINT
         })
-      //console.log(min)
       return min
     },
     Chartaverage(result) {
@@ -234,11 +230,10 @@ export default {
         average = average + data.GRADEPOINT;
       });
       average = average / result.length;
-      //console.log("average = " + average.toFixed(2));
       return average.toFixed(2)
     }
   },
-  mounted() {
+  created() {
     this.Readdatasetting();
   },
 };

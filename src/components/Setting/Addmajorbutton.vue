@@ -37,7 +37,6 @@ import firebase from '@/firebaseConfig'
 const db = firebase.firestore()
 export default {
     props: {
-        datamajor: Function,
         datas: Array
     },
     data(){
@@ -63,7 +62,6 @@ export default {
             .then(() => {
                 console.log('Document successfully written!')
                 this.$refs['my-modal'].hide()
-                this.datamajor()
                 this.Clear()
             })
             .catch((error) => {

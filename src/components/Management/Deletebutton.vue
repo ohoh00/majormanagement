@@ -28,9 +28,16 @@ export default {
     props:{
         data: Function
     },
+    data() {
+        return {
+            doc_size: null,
+            count: 1
+        }
+    },
     methods:{
         ManageId() {
             db.collection("Manage").get().then((snapshot) => {
+                this.doc_size = snapshot.size
                 snapshot.forEach((docs) => {
                 this.Deletedata(docs.id);
                 });
@@ -38,10 +45,11 @@ export default {
         },
         Deletedata(id) {
             db.collection("Manage").doc(id).delete()
-            .then(() => {
+            .then(() => {  
                 console.log('Delete Document successfully')
-                this.data()
                 this.$refs['my-modal-delete'].hide()
+                if(this.count++ == this.doc_size)
+                this.data()
             }).catch((error) => {
                 console.error('Error writing document: ', error)
             });

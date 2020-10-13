@@ -79,7 +79,6 @@ import firebase from '@/firebaseConfig'
 const db = firebase.firestore()
 export default {
     props:{
-        datamajor: Function,
         datas: Array,
         docid: Array
     },
@@ -100,7 +99,6 @@ export default {
             db.collection('Setting').doc('Major').collection('Data').doc(this.docid[this.id]).delete()
             .then(() => {
                 console.log('Delete Document successfully')
-                this.datamajor()
                 this.$refs['my-modal-delete'].hide()
             })
             .catch((error) => {
@@ -132,7 +130,6 @@ export default {
             })
             .then(() => {
                 console.log('Update Document successfully')
-                this.datamajor()
                 this.$refs['my-modal'].hide()
             })
             .catch((error) => {

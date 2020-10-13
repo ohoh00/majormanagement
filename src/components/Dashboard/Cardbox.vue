@@ -1,13 +1,7 @@
 <template>
     <div>
     <h5>ปีการศึกษา</h5>
-    <b-form-select
-        v-model="selected"
-        :options="listyear"
-        class="mb-3"
-        disabled-field="notEnabled"
-        @change="Readdata()"
-    ></b-form-select>
+    <b-form-select v-model="selected" :options="listyear" class="mb-3" disabled-field="notEnabled" @change="Readdata()"></b-form-select>
         <div class="row">
             <div class="col-sm-4">
                 <div class="card" style="width: 18rem;">
@@ -94,7 +88,7 @@ export default {
             })
         }
     },
-    mounted() {   
+    created() {   
         this.Getdockey()
     }
 }

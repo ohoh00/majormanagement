@@ -6,15 +6,15 @@
         <button type="button" class='btn btn-primary' style="margin-left:16px;" size="mini" @click="handleUpload">Browse</button>
         </div>
         <br>
-        <Popup :excelDatas="excelData.results" :excelKey="excelData.header"/>
+        <UploadDatabutton :excelDatas="excelData.results" :excelKey="excelData.header"/>
     </div>
 </template>
 
 <script>
 import XLSX from 'xlsx'
-import Popup from '@/components/UploadExcel/Popup.vue'
+import UploadDatabutton from '@/components/UploadExcel/UploadDatabutton.vue'
 export default {
-  components: { Popup },
+  components: { UploadDatabutton },
   props: {
     beforeUpload: Function,
     onSuccess: Function,
