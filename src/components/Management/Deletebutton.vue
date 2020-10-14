@@ -6,8 +6,9 @@
 
     <div>
         <b-modal ref="my-modal-delete" id="bv-modal-example-delete" hide-footer title="ลบข้อมูล">
-            <div>
-                <h4 class="text-center">ต้องการที่จะลบข้อมูลกดปุ่ม<b-badge>ยืนยัน</b-badge></h4>
+            <div class="text-center">
+                <h4>ต้องการที่จะลบข้อมูลกดปุ่ม<b-badge>ยืนยัน</b-badge></h4>
+                <b-spinner v-if="show" variant="primary" label="Spinning"></b-spinner>
             </div>
             <div class="row">
             <div class="col-sm-6">
@@ -31,13 +32,15 @@ export default {
     data() {
         return {
             doc_size: null,
-            count: 1
+            count: 1,
+            show: null
         }
     },
     methods:{
         ManageId() {
             db.collection("Manage").get().then((snapshot) => {
                 this.doc_size = snapshot.size
+                this.show = true
                 snapshot.forEach((docs) => {
                 this.Deletedata(docs.id);
                 });
@@ -47,9 +50,11 @@ export default {
             db.collection("Manage").doc(id).delete()
             .then(() => {  
                 console.log('Delete Document successfully')
-                this.$refs['my-modal-delete'].hide()
-                if(this.count++ == this.doc_size)
-                this.data()
+                if(this.count++ == this.doc_size){
+                    this.show = false
+                    this.$refs['my-modal-delete'].hide()
+                    this.data()
+                }
             }).catch((error) => {
                 console.error('Error writing document: ', error)
             });

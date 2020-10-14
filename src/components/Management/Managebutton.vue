@@ -16,7 +16,7 @@
                 <b-button class="mt-3" variant="danger" block @click="$bvModal.hide('bv-modal-example-manage')">ยกเลิก</b-button>
             </div>
             <div class="col-sm-6">
-                <b-button class="mt-3" variant="success" block @click="Setprocess()">ยืนยัน</b-button>
+                <b-button class="mt-3" variant="success" block @click="Random()">ยืนยัน</b-button>
             </div>
             </div>
             </b-modal>
@@ -39,7 +39,9 @@ export default {
       Gradepoint: [],
       datas: [],
       countmajor: [],
-      students: []
+      students: [],
+      sturandom: [],
+      Major_random: []
     };
   },
   methods: {
@@ -175,7 +177,7 @@ export default {
       this.students = []
       var i = 0;
       var managestu = new Object
-      for (var j = 1; j <= this.countmajor.length; j++) {
+      for (var j = 1; j <= this.countmajor.length + 1; j++) {
         for (var k = 0; k < this.datas.length; k++) {
           if (this.Managedatas[i][`ลำดับ${j}`] == this.datas[k].Code && this.countmajor[k] < this.datas[k].จำนวนรับ) {
             managestu = {
@@ -186,10 +188,18 @@ export default {
               ลำดับที่ได้:(`ลำดับ${j}`),
               สาขาวิชา: this.datas[k].Major
             }
+            console.log(managestu.สาขาวิชา)
             this.students.push(managestu)
             i++;
             j = 0;
             this.countmajor[k]++;
+            break;
+          }
+          else if(this.Managedatas[i][`ลำดับ${j}`] === undefined) {
+            //console.log(this.Managedatas[i].NAME)
+            this.sturandom.push(this.Managedatas[i])
+            i++;
+            j = 0;
             break;
           }
         }
@@ -231,9 +241,31 @@ export default {
       });
       average = average / result.length;
       return average.toFixed(2)
+    },
+    checkmajor() {
+      var r
+      var managestu = new Object
+      for(var i = 0; i < this.sturandom.length;){
+        r = this.Random()
+        if(this.datas[r].จำนวนรับ > this.countmajor[r]){
+          managestu = {
+              STUDENTCODE: this.sturandom[i].STUDENTCODE,
+              NAME: this.sturandom[i].NAME,
+              GPAX: this.sturandom[i].GPAX,
+              GRADEPOINT: this.sturandom[i].GRADEPOINT,
+              สาขาวิชา: this.datas[r].Major
+          }
+          this.students.push(managestu)
+          this.countmajor[r]++
+          i++
+        }
+      }
+    },
+    Random() {
+      return Math.floor(Math.random() * (this.countmajor.length - 0 + 1)) + 0;
     }
   },
-  created() {
+  mounted() {
     this.Readdatasetting();
   },
 };

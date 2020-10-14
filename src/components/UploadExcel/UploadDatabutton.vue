@@ -15,6 +15,7 @@
         <div class="text-center">
           <h4 class="text-center">ต้องการที่จะบันทึกข้อมูลกดปุ่ม<b-badge>ยืนยัน</b-badge>
           </h4>
+          <b-spinner v-if="show" variant="primary" label="Spinning"></b-spinner>
         </div>
         <b-row>
           <b-col>
@@ -25,7 +26,6 @@
           </b-col>
         </b-row>
     </b-modal>
-    
   </div>
 </template>
 <script>
@@ -36,15 +36,21 @@ export default {
     excelDatas: Array,
     excelKey: Array,
   },
+  data() {
+    return{
+      show: null
+    }
+  },
   methods: {
     Delaydata() {  
       var i;
       var data = [];
       var j = 0;
       var num = 0;
-      this.$refs['my-modal'].hide()
+      this.show = true
       if (this.excelDatas.length < 100) {
         this.createData(this.excelDatas, num);
+        this.$refs['my-modal'].hide()
       } 
       else if (this.excelDatas.length >= 100) {
         for (i = 0; i < this.excelDatas.length; i++) {
@@ -64,6 +70,10 @@ export default {
         .set({ Datas })
         .then(() => {
           console.log("Document successfully written!");
+          if(num >= Math.round(this.excelDatas.length/100)){
+            this.$refs['my-modal'].hide()
+            this.show = false
+          }
         })
         .catch((error) => {
           console.error("Error writing document: ", error);
