@@ -16,7 +16,7 @@
                 <b-button class="mt-3" variant="danger" block @click="$bvModal.hide('bv-modal-example-manage')">ยกเลิก</b-button>
             </div>
             <div class="col-sm-6">
-                <b-button class="mt-3" variant="success" block @click="Random()">ยืนยัน</b-button>
+                <b-button class="mt-3" variant="success" block @click="Setprocess()">ยืนยัน</b-button>
             </div>
             </div>
             </b-modal>
@@ -41,7 +41,6 @@ export default {
       countmajor: [],
       students: [],
       sturandom: [],
-      Major_random: []
     };
   },
   methods: {
@@ -84,6 +83,7 @@ export default {
     },
     Delaydata() {
         this.Managemajor()
+        this.Randommajor()
         var i
         var data = []
         var j = 0
@@ -196,7 +196,6 @@ export default {
             break;
           }
           else if(this.Managedatas[i][`ลำดับ${j}`] === undefined) {
-            //console.log(this.Managedatas[i].NAME)
             this.sturandom.push(this.Managedatas[i])
             i++;
             j = 0;
@@ -242,7 +241,7 @@ export default {
       average = average / result.length;
       return average.toFixed(2)
     },
-    checkmajor() {
+    Randommajor() {
       var r
       var managestu = new Object
       for(var i = 0; i < this.sturandom.length;){
@@ -253,8 +252,10 @@ export default {
               NAME: this.sturandom[i].NAME,
               GPAX: this.sturandom[i].GPAX,
               GRADEPOINT: this.sturandom[i].GRADEPOINT,
+              ลำดับที่ได้:('สุ่ม'),
               สาขาวิชา: this.datas[r].Major
           }
+          console.log('สุ่ม = ' + managestu.NAME)
           this.students.push(managestu)
           this.countmajor[r]++
           i++
@@ -262,7 +263,7 @@ export default {
       }
     },
     Random() {
-      return Math.floor(Math.random() * (this.countmajor.length - 0 + 1)) + 0;
+      return Math.floor(Math.random() * ((this.countmajor.length-1) - 0 + 1)) + 0;
     }
   },
   mounted() {
