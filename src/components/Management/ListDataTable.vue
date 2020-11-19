@@ -37,7 +37,7 @@ export default {
     return {
       perPage: 100,
       currentPage: 1,
-      sortBy: "GPAX",
+      sortBy: "GRADEPOINT",
       sortDesc: true,
     };
   },

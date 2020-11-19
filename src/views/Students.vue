@@ -9,19 +9,30 @@
         disabled-field="notEnabled"
         @change="documentsId()"
       ></b-form-select>
+      <b-container>
+      <div class="row">
+      <div>
+        <ExportExcel :json='datas'/>
+      </div>
+      <div>
+        <DeleteAllData :selected='selected'/>
+      </div>
+      </div>
+      </b-container>
       <StudantsTable
         :Studentsdatas='datas'
-        :Datakey='fields'
       />
     </div>
   </b-container>
 </template>
 <script>
+import ExportExcel from "@/components/Students/ExportExcel.vue"
+import DeleteAllData from "@/components/Students/DeleteAllData.vue"
 import StudantsTable from "@/components/Students/StudantsTable.vue";
 import firebase from "@/firebaseConfig";
 const db = firebase.firestore();
 export default {
-  components: { StudantsTable },
+  components: { StudantsTable, ExportExcel, DeleteAllData },
   data() {
     return {
       datas: [],
@@ -33,21 +44,18 @@ export default {
   },
   methods: {
     Getdockey() {
-      db.collection("Dashboard").get().then((snapshot) => {
+      db.collection("Dashboard").onSnapshot(snapshot =>{
+          this.listyear = []
           snapshot.forEach((docs) => {
-            this.listyear.push(docs.id);
-          });
-          this.selected = this.listyear[this.listyear.length - 1];
-          this.documentsId();
+          this.listyear.push(docs.id); 
         });
+        this.selected = this.listyear[this.listyear.length - 1];
+        this.documentsId();
+      })
     },
     documentsId() {
       this.datas = [];
-      this.key = [];
-      this.fields = [];
-      db.collection("Students")
-        .doc(this.selected)
-        .collection("data")
+      db.collection("Students").doc(this.selected).collection("data")
         .get()
         .then((snapshot) => {
           snapshot.forEach((docs) => {
@@ -56,29 +64,11 @@ export default {
         });
     },
     Readdata(id) {
-      db.collection("Students")
-        .doc(this.selected)
-        .collection("data")
-        .doc(id)
-        .get()
+      db.collection("Students").doc(this.selected).collection("data").doc(id).get()
         .then((snapshot) => {
           snapshot.data().Datas.forEach((docs) => {
             this.datas.push(docs);
           });
-          this.key = Object.keys(this.datas[0]);
-          this.key = this.key.sort();
-          this.Sortdata(this.key);
-        });
-    },
-    Sortdata(keys) {
-      this.fields = [];
-      var sortkey = new Object();
-      keys.forEach((data) => {
-        sortkey = {
-          key: data,
-          sortable: true,
-        };
-        this.fields.push(sortkey);
       });
     },
   },

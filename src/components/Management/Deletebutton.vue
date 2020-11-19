@@ -41,6 +41,8 @@ export default {
             db.collection("Manage").get().then((snapshot) => {
                 this.doc_size = snapshot.size
                 this.show = true
+                this.DeleteCustom()
+                this.DeleteMajorcount()
                 snapshot.forEach((docs) => {
                 this.Deletedata(docs.id);
                 });
@@ -58,6 +60,22 @@ export default {
             }).catch((error) => {
                 console.error('Error writing document: ', error)
             });
+        },
+        DeleteCustom() {
+            db.collection("Customstudents").get()
+            .then(res => {
+                res.forEach(element => {
+                    element.ref.delete()
+                })
+            })
+        },
+        DeleteMajorcount() {
+            db.collection("Major_count").get()
+            .then(res => {
+                res.forEach(element => {
+                    element.ref.delete()
+                })
+            })
         }
     }
 }

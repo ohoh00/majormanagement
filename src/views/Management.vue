@@ -3,12 +3,27 @@
     <div>
       <b-container>
       <div class="row">
-      <Managebutton :Managedatas = 'datas' :Datakey = 'key'/>
-      <Deletebutton :data = 'documentsId'/>
+        <div>
+          <Managebutton :Managedatas = 'datas' :Datakey = 'key'/>
+        </div>
+        <div>
+          <Deletebutton :data = 'documentsId'/>
+        </div>
       </div>
       </b-container>
       <br/>
-      <Listdatatable :Managedatas = 'datas' :Datakey = 'fields'/>
+      <div>
+        <b-card no-body>
+          <b-tabs card>
+            <b-tab title="Step 1" active>
+              <Listdatatable :Managedatas = 'datas' :Datakey = 'fields'/>
+            </b-tab>
+            <b-tab title="Step 2">
+              <CustomTable/>
+            </b-tab>
+          </b-tabs>
+        </b-card>
+      </div>
     </div>
   </b-container>
 </template>
@@ -16,15 +31,16 @@
 import Listdatatable from "@/components/Management/ListDataTable.vue";
 import Managebutton from "@/components/Management/Managebutton.vue";
 import Deletebutton from "@/components/Management/Deletebutton.vue";
+import CustomTable from "@/components/Management/CustomTable.vue";
 import firebase from "@/firebaseConfig";
 const db = firebase.firestore();
 export default {
-  components: { Listdatatable, Managebutton, Deletebutton },
+  components: { Listdatatable, Managebutton, Deletebutton, CustomTable },
   data() {
     return {
         datas: [],
         key:[],
-        fields: []
+        fields: [],
     };
   },
   methods: {
@@ -59,7 +75,7 @@ export default {
         }
         this.fields.push(sortkey)
       });
-    }
+    },
   },
   created() {
     this.documentsId();

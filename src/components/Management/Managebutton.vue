@@ -1,8 +1,12 @@
 <template>
-  <div>
+<b-container>
+  <div class="row">
+    <div>
+    <b-button @click="Analyze_stu()" variant="warning" style="color:white">ตรวจสอบ <b-spinner v-if="show_an" small variant="secondary" label="Small Spinner" ></b-spinner></b-button>
+    </div>
     <div>
       <div>
-        <b-button variant="danger" @click="$bvModal.show('bv-modal-example-manage')">จัดสาขาวิชา</b-button>
+        <b-button variant="danger" @click="$bvModal.show('bv-modal-example-manage')" style="margin-left:16px;">จัดสาขาวิชา</b-button>
       </div>
 
       <div>
@@ -10,6 +14,10 @@
             <div>
                 <label>ปีการศึกษา</label>
                 <input type="text" class="form-control" v-model="year">
+            </div>
+            <br/>
+            <div class="text-center">
+                <b-spinner v-if="show" variant="primary" label="Spinning" ></b-spinner>
             </div>
             <div class="row">
             <div class="col-sm-6">
@@ -24,6 +32,7 @@
 
     </div>
   </div>
+  </b-container>
 </template>
 <script>
 import firebase from "@/firebaseConfig";
@@ -41,15 +50,27 @@ export default {
       countmajor: [],
       students: [],
       sturandom: [],
+      Majorstu: [],
+      count_m: [],
+      show: null,
+      show_an: null,
+      stu_set: 0
     };
   },
   methods: {
     Setprocess() {
+      if(this.datas.length != this.Openmajor()){
+        alert('จำนวนสาขาวิชาที่เปิดไม่สอดคล้องกัน')
+      }
+      else if(this.stu_set < this.Managedatas.length){
+        alert('จำนวนที่นั่งไม่สอดคล้องกับจำนวนนักศึกษา')
+      }
+      this.show = true
       this.Setdata_GP()
       this.Dashboardcard()
       this.Delaydata()
       this.Chartdata()
-      this.$refs['my-modal-manage'].hide()
+      this.count_stu()
     },
     Dashboardcard() {
       db.collection("Dashboard").doc(this.year).set({
@@ -82,8 +103,8 @@ export default {
         })
     },
     Delaydata() {
-        this.Managemajor()
-        this.Randommajor()
+      this.Managemajor()
+      this.Randommajor()
         var i
         var data = []
         var j = 0
@@ -118,6 +139,7 @@ export default {
         .then((snapshot) => {
           snapshot.forEach((docs) => {
             this.datas.push(docs.data());
+            this.stu_set += docs.data().จำนวนรับ
           });
         });
     },
@@ -145,8 +167,8 @@ export default {
       return average_gp.toFixed(2);
     },
     Openmajor() {
-      this.countmajor = [];
       var num = 0;
+      this.countmajor = [];
       for (let i = 1; i < this.Datakey.length; i++) {
         if (this.Datakey.includes(`ลำดับ${i}`)) {
           num++;
@@ -169,10 +191,12 @@ export default {
       console.log("สาขาเลือกมากสุด = " + this.datas[index].Major);
       return this.datas[index].Major;
     },
-    Managemajor() {
+    Analyze_stu() {
+      if(this.sturandom.length == 0 && this.datas.length == this.Openmajor() && this.stu_set >= this.Managedatas.length){
+      this.show_an = true
       this.Openmajor();
       this.Managedatas.sort((a, b) => {
-        return b.GPAX - a.GPAX;
+        return b.GRADEPOINT - a.GRADEPOINT;
       });
       this.students = []
       var i = 0;
@@ -188,22 +212,91 @@ export default {
               ลำดับที่ได้:(`ลำดับ${j}`),
               สาขาวิชา: this.datas[k].Major
             }
-            console.log(managestu.สาขาวิชา)
             this.students.push(managestu)
+            this.countmajor[k]++
             i++;
             j = 0;
-            this.countmajor[k]++;
             break;
           }
           else if(this.Managedatas[i][`ลำดับ${j}`] === undefined) {
-            this.sturandom.push(this.Managedatas[i])
+            db.collection('Customstudents').add({
+              STUDENTCODE: this.Managedatas[i].STUDENTCODE,
+              NAME: this.Managedatas[i].NAME,
+              GPAX: this.Managedatas[i].GPAX,
+              GRADEPOINT: this.Managedatas[i].GRADEPOINT,
+              สาขาวิชา: null
+            })
+            .then(function(docRef) {
+                console.log("Document written with ID: ", docRef.id);
+              })
+            .catch(function(error) {
+                console.error("Error adding document: ", error);
+              });
             i++;
             j = 0;
             break;
           }
         }
-        if (i == this.Managedatas.length) break;
+        if (i == this.Managedatas.length){
+          for(var m = 0 ; m < this.countmajor.length; m++){
+            if(this.countmajor[m] < this.datas[m].จำนวนรับ){
+              db.collection('Major_count').doc(this.datas[m].Major).set({
+              Major: this.datas[m].Major,
+              ที่นั่ง: (this.datas[m].จำนวนรับ - this.countmajor[m])
+            })
+            .then(() => {
+              this.show_an = false
+            })
+            }
+          }
+          break;
+        }
       }
+    }
+    else if(this.datas.length != this.Openmajor()){
+      alert('จำนวนสาขาวิชาที่เปิดไม่สอดคล้องกัน')
+    }
+    else if(this.stu_set < this.Managedatas.length){
+      alert('จำนวนที่นั่งไม่สอดคล้องกับจำนวนนักศึกษา')
+    }
+    },
+    Managemajor() {
+      this.Openmajor();
+      this.Managedatas.sort((a, b) => {
+        return b.GRADEPOINT - a.GRADEPOINT;
+      });
+      this.students = []
+      this.c
+      var i = 0;
+      var managestu = new Object
+      for (var j = 1; j <= this.countmajor.length + 1; j++) {
+        for (var k = 0; k < this.datas.length; k++) {
+          if (this.Managedatas[i][`ลำดับ${j}`] == this.datas[k].Code && this.countmajor[k] < this.datas[k].จำนวนรับ) {
+            managestu = {
+              STUDENTCODE: this.Managedatas[i].STUDENTCODE,
+              NAME: this.Managedatas[i].NAME,
+              GPAX: this.Managedatas[i].GPAX,
+              GRADEPOINT: this.Managedatas[i].GRADEPOINT,
+              ลำดับที่ได้:(`ลำดับ${j}`),
+              สาขาวิชา: this.datas[k].Major
+            }
+            this.students.push(managestu)
+            this.countmajor[k]++
+            i++;
+            j = 0;
+            break;
+          }
+          else if(this.Managedatas[i][`ลำดับ${j}`] === undefined) {
+            i++;
+            j = 0;
+            break;
+          }
+        }
+        if (i == this.Managedatas.length){
+          break;
+        }
+      }
+      
     },
     Chartdata() {
       for(var i = 0; i<this.datas.length; i++){
@@ -241,33 +334,91 @@ export default {
       average = average / result.length;
       return average.toFixed(2)
     },
+    Customstu() {
+       db.collection("Customstudents").orderBy("GRADEPOINT", "desc").onSnapshot(snapshot => {
+                this.sturandom = []
+                snapshot.forEach((docs) => {
+                this.sturandom.push(docs.data());
+          })
+        });
+    },
+    Majorcount() {
+          db.collection("Major_count").onSnapshot(snapshot => {
+              this.Majorstu = []
+              this.count_m = []
+              snapshot.forEach((docs) => {
+              if(docs.data().ที่นั่ง != 0){
+              this.Majorstu.push(docs.data());
+              this.count_m.push(0);
+            }
+          })
+        })
+        },
     Randommajor() {
       var r
       var managestu = new Object
       for(var i = 0; i < this.sturandom.length;){
         r = this.Random()
-        if(this.datas[r].จำนวนรับ > this.countmajor[r]){
+        if(this.sturandom[i].สาขาวิชา == null &&  this.count_m[r] < this.Majorstu[r].ที่นั่ง){
           managestu = {
               STUDENTCODE: this.sturandom[i].STUDENTCODE,
               NAME: this.sturandom[i].NAME,
               GPAX: this.sturandom[i].GPAX,
               GRADEPOINT: this.sturandom[i].GRADEPOINT,
-              ลำดับที่ได้:('สุ่ม'),
-              สาขาวิชา: this.datas[r].Major
+              ลำดับที่ได้:('กำหนดเอง/สุ่ม'),
+              สาขาวิชา: this.Majorstu[r].Major
           }
-          console.log('สุ่ม = ' + managestu.NAME)
           this.students.push(managestu)
-          this.countmajor[r]++
+          this.count_m[r]++
+          i++
+        }
+        else if(this.sturandom[i].สาขาวิชา != null){
+           managestu = {
+              STUDENTCODE: this.sturandom[i].STUDENTCODE,
+              NAME: this.sturandom[i].NAME,
+              GPAX: this.sturandom[i].GPAX,
+              GRADEPOINT: this.sturandom[i].GRADEPOINT,
+              ลำดับที่ได้:('กำหนดเอง/สุ่ม'),
+              สาขาวิชา: this.sturandom[i].สาขาวิชา
+          }
+          this.students.push(managestu)
           i++
         }
       }
     },
+    count_stu() {
+      var cstu = []
+      var mstu = new Object
+      for(var i = 0; i < this.Majorstu.length; i++){
+        if( this.count_m[i] < this.Majorstu[i].ที่นั่ง){
+          mstu = {
+            สาขาวิชา: this.Majorstu[i].Major,
+            จำนวนที่เหลือ: (this.Majorstu[i].ที่นั่ง - this.count_m[i])
+          }
+          cstu.push(mstu)
+        }
+      }
+      this.upcout_stu(cstu)
+    },
+    upcout_stu(cstu) {
+       db.collection('count_m').doc(this.year).set({cstu})
+          .then(() => {
+            console.log('count_stu successfully written!')
+            this.show = false
+            this.$refs['my-modal-manage'].hide()
+          })
+          .catch((error) => {
+            console.error('Error writing document: ', error)
+          })
+    },
     Random() {
-      return Math.floor(Math.random() * ((this.countmajor.length-1) - 0 + 1)) + 0;
+      return Math.floor(Math.random() * ((this.count_m.length-1) - 0 + 1)) + 0;
     }
   },
   mounted() {
     this.Readdatasetting();
+    this.Customstu()
+    this.Majorcount()
   },
 };
 </script>
