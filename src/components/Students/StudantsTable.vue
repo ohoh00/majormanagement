@@ -2,7 +2,7 @@
 <div>
   <div v-if="Setstatus() == false">
       <br/>
-      <b-alert show class="text-center">ไม่มีข้อมูล</b-alert>
+      <b-alert show class="text-center">โหลดข้อมูล <b-spinner small variant="primary" label="Spinning"></b-spinner></b-alert>
   </div>
   <div v-if="Setstatus()">
     <b-pagination

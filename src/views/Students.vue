@@ -66,8 +66,17 @@ export default {
     Readdata(id) {
       db.collection("Students").doc(this.selected).collection("data").doc(id).get()
         .then((snapshot) => {
+          var stu = new Object
           snapshot.data().Datas.forEach((docs) => {
-            this.datas.push(docs);
+            stu = {
+              STUDENTCODE: docs.STUDENTCODE,
+              NAME: docs.NAME,
+              GRADEPOINT: docs.GRADEPOINT,
+              GPAX: docs.GPAX,
+              ลำดับที่ได้: docs.ลำดับที่ได้,
+              สาขาวิชา: docs.สาขาวิชา
+            }
+            this.datas.push(stu);
           });
       });
     },
