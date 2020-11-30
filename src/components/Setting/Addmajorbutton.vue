@@ -58,7 +58,7 @@ export default {
             sum ? this.Majorfrom() : alert('Code ซ้ำ')
         },
         Majorfrom() {
-            db.collection('Setting').doc('Major').collection('Data').add(this.majorfrom)
+            db.collection('Setting').doc('Major').collection('Data').doc(this.majorfrom.Major).set(this.majorfrom)
             .then(() => {
                 console.log('Document successfully written!')
                 this.$refs['my-modal'].hide()

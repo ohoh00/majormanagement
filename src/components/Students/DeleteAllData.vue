@@ -36,6 +36,7 @@ export default {
             this.show = true
             this.DeleteStudants()
             this.DeleteDashboard()
+            this.Deletecout_stu()
             this.DeleteChart()
         },
         DeleteStudants() {
@@ -51,6 +52,13 @@ export default {
             db.collection("Dashboard").doc(this.selected).delete()
             .then(() => {
                  console.log('Dashboard Delete Document successfully')
+            }
+            )
+        },
+        Deletecout_stu() {
+             db.collection("count_m").doc(this.selected).delete()
+            .then(() => {
+                 console.log('count_m Delete Document successfully')
             }
             )
         },

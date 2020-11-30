@@ -19,7 +19,6 @@
         <b-button variant="info" size="sm">
         <div class="row">
         <b-container>
-        <b-avatar src=picture></b-avatar>
         <div class="ml-2"> {{user.Name}}</div>
         <b-nav-item-dropdown right>
           <b-dropdown-item href="/adduser">เพิ่มบัญชีผู้ใช้</b-dropdown-item>
@@ -43,7 +42,6 @@ export default {
   data() {
     return{
       user:{},
-      picture:null
     }
   },
   methods:{
@@ -59,7 +57,6 @@ export default {
           this.user = user.email
           console.log('user = ' + this.user)
           this.datauser()
-          this.profileimg()
         }
       })
     },
@@ -71,13 +68,6 @@ export default {
         console.log(this.user)
       })
     },
-    profileimg() {
-        const storageRef = firebase.storage().ref(this.user)
-        storageRef.getDownloadURL().then((url)=>{
-        this.picture = url;
-        console.log('url =' + this.picture)
-      })
-    }
   },
   created() {
     this.emailuser()

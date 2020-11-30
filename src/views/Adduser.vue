@@ -33,13 +33,7 @@
             <b-form-valid-feedback :state="validationconfirm">
             </b-form-valid-feedback>
         </div>
-
-        <div class="form-group">
-          <label for="exampleFormControlFile1">Example file input</label>
-          <input type="file" accept="image/jpeg, image/png" class="form-control-file" id="exampleFormControlFile1" @change="createImage">
-          <img :src="image" />
-        </div>
-
+        <br/>
         <button type="submit" class="btn btn-dark btn-lg btn-block mt-3">ลงทะเบียนบัญชี</button>
 
     </b-form>
@@ -56,8 +50,6 @@ export default {
           useremail:'',
           password:'',
           confirmpassword:'',
-          image: '',
-          file: null
       }
     },
     //computed ใช้เมื่อต้องการดักจับการเปลี่ยนแปลง
@@ -75,7 +67,6 @@ export default {
             firebase.auth().createUserWithEmailAndPassword(this.useremail, this.password)
             .then(() => {
               this.adduser()
-              this.uploadimg(this.file[0])
               alert('ลงทะเบียนสำเร็จ')
             })
             .catch(function(error) {
@@ -84,21 +75,6 @@ export default {
             // ...
             });
           }
-        },
-        createImage(e) {
-          this.file = e.target.files || e.dataTransfer.files
-          //new FileReader() ใช้อ่านไบนารี่
-          var reader = new FileReader()
-          //.readAsDataURL อ่านไบนารี่
-          reader.readAsDataURL(this.file[0])
-          // .onload ใช้เพื่อให้รูปภาพโหลดให้เสร็จก่อน
-          reader.onload = e => {
-            this.image = e.target.result
-          }
-        },
-        uploadimg(file) {
-          const storageRef = firebase.storage().ref(this.useremail)
-          storageRef.put(file)
         },
         adduser() {
           db.collection('User').add({
@@ -116,11 +92,3 @@ export default {
     }
 };
 </script>
-<style scoped>
-img {
-  width: 20%;
-  margin: auto;
-  display: block;
-  margin-bottom: 10px;
-}
-</style>

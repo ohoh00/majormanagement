@@ -390,7 +390,7 @@ export default {
       var cstu = []
       var mstu = new Object
       for(var i = 0; i < this.Majorstu.length; i++){
-        if( this.count_m[i] < this.Majorstu[i].ที่นั่ง){
+        if( this.count_m[i] < this.Majorstu[i].ที่นั่ง){   
           mstu = {
             สาขาวิชา: this.Majorstu[i].Major,
             จำนวนที่เหลือ: (this.Majorstu[i].ที่นั่ง - this.count_m[i])
@@ -398,10 +398,32 @@ export default {
           cstu.push(mstu)
         }
       }
-      this.upcout_stu(cstu)
+      this.updatestu(cstu)
     },
-    upcout_stu(cstu) {
-       db.collection('count_m').doc(this.year).set({cstu})
+    updatestu(cstu) {
+      var Major_c = []
+      var count = []
+      var stu = new Object
+      var cout_stu = []
+      this.datas.forEach(element => {
+         Major_c.push(element.Major) 
+         count.push(element.จำนวนรับ) 
+      });
+      for(var i = 0; i < cstu.length; i++){
+        var Major_index = Major_c.indexOf(cstu[i].สาขาวิชา)
+        count[Major_index] = (count[Major_index] - cstu[i].จำนวนที่เหลือ)
+      }
+      for(var j = 0; j < Major_c.length; j++){
+        stu = {
+            Major: Major_c[j],
+            จำนวนนักศึกษา: count[j]
+        }
+        cout_stu.push(stu)
+      }
+      this.upcout_stu(cout_stu)
+    },
+    upcout_stu(cout_stu) {
+       db.collection('count_m').doc(this.year).set({cout_stu})
           .then(() => {
             console.log('count_stu successfully written!')
             this.show = false
@@ -414,6 +436,7 @@ export default {
     Random() {
       return Math.floor(Math.random() * ((this.count_m.length-1) - 0 + 1)) + 0;
     }
+    
   },
   mounted() {
     this.Readdatasetting();
