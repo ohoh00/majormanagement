@@ -4,7 +4,7 @@
       <b-container>
       <div class="row">
         <div>
-          <Managebutton :Managedatas = 'datas' :Datakey = 'key'/>
+          <Managebutton :Managedatas = 'datas' :Datakey = 'key' :documentsId = 'documentsId'/>
         </div>
         <div>
           <Deletebutton :data = 'documentsId'/>

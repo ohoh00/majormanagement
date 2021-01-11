@@ -41,6 +41,7 @@ export default {
   props: {
     Managedatas: Array,
     Datakey: Array,
+    documentsId: Function
   },
   data() {
     return {
@@ -54,7 +55,8 @@ export default {
       count_m: [],
       show: null,
       show_an: null,
-      stu_set: 0
+      stu_set: 0,
+      deletenum: null
     };
   },
   methods: {
@@ -65,12 +67,14 @@ export default {
       else if(this.stu_set < this.Managedatas.length){
         alert('จำนวนที่นั่งไม่สอดคล้องกับจำนวนนักศึกษา')
       }
-      this.show = true
-      this.Setdata_GP()
-      this.Dashboardcard()
-      this.Delaydata()
-      this.Chartdata()
-      this.count_stu()
+      else {
+        this.show = true
+        this.Setdata_GP()
+        this.Dashboardcard()
+        this.Delaydata()
+        this.Chartdata()
+        this.count_stu()
+      }
     },
     Dashboardcard() {
       db.collection("Dashboard").doc(this.year).set({
@@ -415,7 +419,7 @@ export default {
       }
       for(var j = 0; j < Major_c.length; j++){
         stu = {
-            Major: Major_c[j],
+            สาขาวิชา: Major_c[j],
             จำนวนนักศึกษา: count[j]
         }
         cout_stu.push(stu)
@@ -426,12 +430,52 @@ export default {
        db.collection('count_m').doc(this.year).set({cout_stu})
           .then(() => {
             console.log('count_stu successfully written!')
-            this.show = false
-            this.$refs['my-modal-manage'].hide()
+            this.setDelete()      
           })
           .catch((error) => {
             console.error('Error writing document: ', error)
           })
+    },
+    setDelete() {
+      this.DeleteCustomstudents()
+      this.DeleteMajorcount()
+      this.DeleteManage()
+      this.documentsId()
+    },
+    DeleteCustomstudents() {
+       db.collection("Customstudents").get()
+            .then(res => {
+                res.forEach(element => {
+                    element.ref.delete()
+                })
+                
+                console.log('Delete Document successfully')
+            })
+    },
+    DeleteMajorcount() {
+      db.collection("Major_count").get()
+            .then(res => {
+                res.forEach(element => {
+                    element.ref.delete()
+                })
+                
+                console.log('Delete Document successfully')
+            })
+    },
+    DeleteManage() {
+      var num = 0
+      db.collection("Manage").get()
+            .then(res => {
+                res.forEach(element => {
+                    element.ref.delete()
+                    num++
+                })
+                if(num == res.size) {
+                  this.show = false
+                  this.$refs['my-modal-manage'].hide()
+                  console.log('Delete Document successfully')
+                }
+            })
     },
     Random() {
       return Math.floor(Math.random() * ((this.count_m.length-1) - 0 + 1)) + 0;

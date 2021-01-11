@@ -63,14 +63,19 @@ export default {
             )
         },
         DeleteChart() {
+            var num = 0
             db.collection("Dashboard").doc(this.selected).collection('Chart').get()
             .then(res => {
                 res.forEach(element => {
                     element.ref.delete()
+                    num++
                 })
-                this.show = false
-                this.$refs['my-modal-delete'].hide()
-                console.log('Dashboard Chart Delete Document successfully')
+                if(num == res.size) {
+                  this.show = false
+                  this.$refs['my-modal-delete'].hide()
+                  console.log('Dashboard Chart Delete Document successfully')
+                }
+                
             })
         }
     }

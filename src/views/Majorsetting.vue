@@ -5,9 +5,6 @@
             <div>
                 <Addmajorbutton :datas="datas"/>
             </div>
-            <div class="ml-auto">
-               <Editfilterbutton/>
-            </div>
         </div>
         <br>
         <Datatable :datas="datas" :docid="id"/>
@@ -17,11 +14,11 @@
 <script>
 import Datatable from '@/components/Setting/Datatable.vue'
 import Addmajorbutton from '@/components/Setting/Addmajorbutton.vue'
-import Editfilterbutton from '@/components/Setting/Editfilterbutton.vue'
+//import Editfilterbutton from '@/components/Setting/Editfilterbutton.vue'
 import firebase from '@/firebaseConfig'
 const db = firebase.firestore()
 export default {
-    components:{Datatable, Addmajorbutton, Editfilterbutton},
+    components:{Datatable, Addmajorbutton},
     data() {
         return{
             datas: [],

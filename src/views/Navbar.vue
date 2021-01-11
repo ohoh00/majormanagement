@@ -11,6 +11,7 @@
         <b-nav-item href="/uploadexcel">Upload Excel</b-nav-item>
         <b-nav-item href="/management">จัดสาขาวิชา</b-nav-item>
         <b-nav-item href="/students">ข้อมูลนักศึกษา</b-nav-item>
+        <b-nav-item href="/majors">ข้อมูลสาขาวิชา</b-nav-item>
         <b-nav-item href="/setting">ตั้งค่า</b-nav-item>
       </b-navbar-nav>
 
@@ -21,7 +22,7 @@
         <b-container>
         <div class="ml-2"> {{user.Name}}</div>
         <b-nav-item-dropdown right>
-          <b-dropdown-item href="/adduser">เพิ่มบัญชีผู้ใช้</b-dropdown-item>
+          <b-dropdown-item href="/adduser" v-if="user.Name == 'Admin'">เพิ่มบัญชีผู้ใช้</b-dropdown-item>
           <b-dropdown-item @click="signout()">ออกจากระบบ</b-dropdown-item>
         </b-nav-item-dropdown>
         </b-container>
@@ -41,7 +42,7 @@ const db = firebase.firestore();
 export default {
   data() {
     return{
-      user:{},
+      user:{}
     }
   },
   methods:{
@@ -54,18 +55,18 @@ export default {
     emailuser() {
       firebase.auth().onAuthStateChanged(user => {
         if (user){
-          this.user = user.email
-          console.log('user = ' + this.user)
-          this.datauser()
+          //console.log('user = ' + user.email)
+          this.datauser(user.email)
         }
       })
     },
-    datauser() {
-       db.collection('User').where('Email','==', this.user).get().then((snapshot) => {
+    datauser(email) {
+       db.collection('User').where('Email','==', email).get()
+       .then((snapshot) => {
         snapshot.forEach(doc => {
           this.user = doc.data()
+          //console.log(this.user.Name)
         });
-        console.log(this.user)
       })
     },
   },

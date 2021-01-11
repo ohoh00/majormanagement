@@ -68,6 +68,7 @@ export default {
             .then(() => {
               this.adduser()
               alert('ลงทะเบียนสำเร็จ')
+              
             })
             .catch(function(error) {
             // Handle Errors here.
@@ -84,11 +85,18 @@ export default {
           })
           .then(() => {
             console.log("Document written with ID: ");
+            this.signout()
           })
           .catch(error => {
             console.error("Error adding document: ", error);
           });
-        }
+        },
+        signout() {
+          firebase.auth().signOut()
+        .then(() => {
+         this.$router.push("/");
+       });
+    },
     }
 };
 </script>

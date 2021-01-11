@@ -7,6 +7,7 @@ const management = () => import('@/views/Management.vue')
 const students = () => import('@/views/Students.vue')
 const login = () => import('@/views/Login.vue')
 const adduser = () => import('@/views/Adduser.vue')
+const major_data = () => import('@/views/Major_data.vue')
 
 Vue.use(VueRouter)
 
@@ -46,7 +47,11 @@ Vue.use(VueRouter)
     name: 'adduser',
     component: adduser
   },
- 
+  {
+    path: '/majors',
+    name: 'major_data',
+    component: major_data
+  },
 ]
 
 const router = new VueRouter({
