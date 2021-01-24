@@ -4,7 +4,7 @@
       <b-container>
       <div class="row">
         <div>
-          <Managebutton :Managedatas = 'datas' :Datakey = 'key' :documentsId = 'documentsId'/>
+          <Managebutton :Managedatas = 'M_datas' :Datakey = 'key' :documentsId = 'documentsId' :Filter_GP = 'Fi_datas'/>
         </div>
         <div>
           <Deletebutton :data = 'documentsId'/>
@@ -21,6 +21,9 @@
             <b-tab title="Step 2">
               <CustomTable/>
             </b-tab>
+             <b-tab title="Step 3">
+               <FitterTable/>
+            </b-tab>
           </b-tabs>
         </b-card>
       </div>
@@ -32,15 +35,19 @@ import Listdatatable from "@/components/Management/ListDataTable.vue";
 import Managebutton from "@/components/Management/Managebutton.vue";
 import Deletebutton from "@/components/Management/Deletebutton.vue";
 import CustomTable from "@/components/Management/CustomTable.vue";
+import FitterTable from "@/components/Management/FitterTable.vue";
 import firebase from "@/firebaseConfig";
 const db = firebase.firestore();
 export default {
-  components: { Listdatatable, Managebutton, Deletebutton, CustomTable },
+  components: { Listdatatable, Managebutton, Deletebutton, CustomTable, FitterTable },
   data() {
     return {
         datas: [],
         key:[],
         fields: [],
+        M_datas: [],
+        Fi_datas: [],
+        filter: null,
     };
   },
   methods: {
@@ -63,6 +70,7 @@ export default {
           this.key = Object.keys(this.datas[0])
           this.key = this.key.sort()
           this.Sortdata(this.key)
+          this.Filter_GP(this.datas)
         });
     },
     Sortdata(keys) {
@@ -76,8 +84,24 @@ export default {
         this.fields.push(sortkey)
       });
     },
+    GpFitter() {
+            db.collection('Setting').doc('Filter').collection('Gradepoint').doc('Min').onSnapshot(doc =>{
+                this.filter = doc.data().Gradepoint
+            })
+    },
+    Filter_GP(datas){
+      this.M_datas = []
+      this.Fi_datas = []
+      this.M_datas = datas.filter((member) => {
+        return member.GRADEPOINT >= this.filter
+      })
+      this.Fi_datas = datas.filter((member) => {
+        return member.GRADEPOINT < this.filter
+      })
+    },
   },
-  created() {
+  mounted() {
+    this.GpFitter()
     this.documentsId();
   },
 };

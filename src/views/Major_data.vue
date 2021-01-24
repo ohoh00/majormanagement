@@ -29,13 +29,13 @@ export default {
     },
     methods:{
         Getdockey() {
-      db.collection("Dashboard").onSnapshot(snapshot =>{
-          this.listyear = []
-          snapshot.forEach((docs) => {
-          this.listyear.push(docs.id); 
-        });
-        this.selected = this.listyear[this.listyear.length - 1];
-        this.Readdata();
+            db.collection("Dashboard").onSnapshot(snapshot =>{
+                this.listyear = []
+                snapshot.forEach((docs) => {
+                this.listyear.push(docs.id); 
+            });
+            this.selected = this.listyear[this.listyear.length - 1];
+            this.Readdata();
             })
         },
         Readdata() {

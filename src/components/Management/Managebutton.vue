@@ -41,7 +41,8 @@ export default {
   props: {
     Managedatas: Array,
     Datakey: Array,
-    documentsId: Function
+    documentsId: Function,
+    Filter_GP: Array
   },
   data() {
     return {
@@ -53,10 +54,12 @@ export default {
       sturandom: [],
       Majorstu: [],
       count_m: [],
+      listyear:[],
       show: null,
       show_an: null,
       stu_set: 0,
-      deletenum: null
+      deletenum: null,
+      analyze_check: 0,
     };
   },
   methods: {
@@ -67,6 +70,12 @@ export default {
       else if(this.stu_set < this.Managedatas.length){
         alert('จำนวนที่นั่งไม่สอดคล้องกับจำนวนนักศึกษา')
       }
+      else if(this.analyze_check == 0) {
+        alert('กรุณากดปุ่มตรวจสอบ')
+      }
+      else if(this.ch_year()){
+        alert('ปีการศึกษาซ้ำซ้อน')
+      }
       else {
         this.show = true
         this.Setdata_GP()
@@ -74,6 +83,31 @@ export default {
         this.Delaydata()
         this.Chartdata()
         this.count_stu()
+        this.Stu_Filter()
+      }
+    },
+    Stu_Filter(){
+      var stu_ft = this.Filter_GP
+      db.collection("Student_Filter").doc(this.year).set({stu_ft})
+      .then(() => {
+            console.log('Filter successfully written!')
+          })
+        .catch((error) => {
+            console.error('Error writing document: ', error)
+      })
+    },
+    list_year() {
+       db.collection("Dashboard").onSnapshot(snapshot =>{
+          this.listyear = []
+          snapshot.forEach((docs) => {
+          this.listyear.push(docs.id); 
+        });
+      })
+    },
+    ch_year() {
+      for(var i = 0; i < this.listyear.length; i++){
+        if(this.listyear[i] == this.year)
+        return true
       }
     },
     Dashboardcard() {
@@ -197,6 +231,7 @@ export default {
     },
     Analyze_stu() {
       if(this.sturandom.length == 0 && this.datas.length == this.Openmajor() && this.stu_set >= this.Managedatas.length){
+      this.analyze_check++
       this.show_an = true
       this.Openmajor();
       this.Managedatas.sort((a, b) => {
@@ -270,7 +305,6 @@ export default {
         return b.GRADEPOINT - a.GRADEPOINT;
       });
       this.students = []
-      this.c
       var i = 0;
       var managestu = new Object
       for (var j = 1; j <= this.countmajor.length + 1; j++) {
@@ -483,6 +517,7 @@ export default {
     
   },
   mounted() {
+    this.list_year()
     this.Readdatasetting();
     this.Customstu()
     this.Majorcount()
