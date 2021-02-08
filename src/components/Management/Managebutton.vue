@@ -59,7 +59,6 @@ export default {
       show_an: null,
       stu_set: 0,
       deletenum: null,
-      analyze_check: 0,
     };
   },
   methods: {
@@ -69,9 +68,6 @@ export default {
       }
       else if(this.stu_set < this.Managedatas.length){
         alert('จำนวนที่นั่งไม่สอดคล้องกับจำนวนนักศึกษา')
-      }
-      else if(this.analyze_check == 0) {
-        alert('กรุณากดปุ่มตรวจสอบ')
       }
       else if(this.ch_year()){
         alert('ปีการศึกษาซ้ำซ้อน')
@@ -221,7 +217,7 @@ export default {
       for (let i = 0; i < this.datas.length; i++) {
         var count = 0;
         for (let j = 0; j < this.Managedatas.length; j++) {
-          if (this.Managedatas[j].ลำดับ1 == this.datas[i].Code) count++;
+          if (this.Managedatas[j][`ลำดับ1`] == this.datas[i].Code) count++;
         }
         max_major[i] = count;
       }
@@ -229,14 +225,27 @@ export default {
       console.log("สาขาเลือกมากสุด = " + this.datas[index].Major);
       return this.datas[index].Major;
     },
+    SortData() {
+      this.Managedatas.sort((a, b) => {
+        if (a.GRADEPOINT < b.GRADEPOINT)
+          return 1;
+        else if (a.GRADEPOINT > b.GRADEPOINT)
+          return -1;
+        else {
+          if (a.ลำดับที่ลงทะเบียน < b.ลำดับที่ลงทะเบียน)
+            return -1;
+          else if (a.ลำดับที่ลงทะเบียน > b.ลำดับที่ลงทะเบียน)
+            return 1;
+          else
+            return 0;
+        }
+      });
+    },
     Analyze_stu() {
       if(this.sturandom.length == 0 && this.datas.length == this.Openmajor() && this.stu_set >= this.Managedatas.length){
-      this.analyze_check++
       this.show_an = true
       this.Openmajor();
-      this.Managedatas.sort((a, b) => {
-        return b.GRADEPOINT - a.GRADEPOINT;
-      });
+      this.SortData()
       this.students = []
       var i = 0;
       var managestu = new Object
@@ -244,6 +253,7 @@ export default {
         for (var k = 0; k < this.datas.length; k++) {
           if (this.Managedatas[i][`ลำดับ${j}`] == this.datas[k].Code && this.countmajor[k] < this.datas[k].จำนวนรับ) {
             managestu = {
+              ลำดับที่ลงทะเบียน: this.Managedatas[i].ลำดับที่ลงทะเบียน,
               STUDENTCODE: this.Managedatas[i].STUDENTCODE,
               NAME: this.Managedatas[i].NAME,
               GPAX: this.Managedatas[i].GPAX,
@@ -259,6 +269,7 @@ export default {
           }
           else if(this.Managedatas[i][`ลำดับ${j}`] === undefined) {
             db.collection('Customstudents').add({
+              ลำดับที่ลงทะเบียน: this.Managedatas[i].ลำดับที่ลงทะเบียน,
               STUDENTCODE: this.Managedatas[i].STUDENTCODE,
               NAME: this.Managedatas[i].NAME,
               GPAX: this.Managedatas[i].GPAX,
@@ -301,9 +312,7 @@ export default {
     },
     Managemajor() {
       this.Openmajor();
-      this.Managedatas.sort((a, b) => {
-        return b.GRADEPOINT - a.GRADEPOINT;
-      });
+      this.SortData()
       this.students = []
       var i = 0;
       var managestu = new Object
@@ -311,6 +320,7 @@ export default {
         for (var k = 0; k < this.datas.length; k++) {
           if (this.Managedatas[i][`ลำดับ${j}`] == this.datas[k].Code && this.countmajor[k] < this.datas[k].จำนวนรับ) {
             managestu = {
+              ลำดับที่ลงทะเบียน: this.Managedatas[i].ลำดับที่ลงทะเบียน,
               STUDENTCODE: this.Managedatas[i].STUDENTCODE,
               NAME: this.Managedatas[i].NAME,
               GPAX: this.Managedatas[i].GPAX,
@@ -399,6 +409,7 @@ export default {
         r = this.Random()
         if(this.sturandom[i].สาขาวิชา == null &&  this.count_m[r] < this.Majorstu[r].ที่นั่ง){
           managestu = {
+              ลำดับที่ลงทะเบียน: this.Managedatas[i].ลำดับที่ลงทะเบียน,
               STUDENTCODE: this.sturandom[i].STUDENTCODE,
               NAME: this.sturandom[i].NAME,
               GPAX: this.sturandom[i].GPAX,
@@ -412,6 +423,7 @@ export default {
         }
         else if(this.sturandom[i].สาขาวิชา != null){
            managestu = {
+              ลำดับที่ลงทะเบียน: this.Managedatas[i].ลำดับที่ลงทะเบียน,
               STUDENTCODE: this.sturandom[i].STUDENTCODE,
               NAME: this.sturandom[i].NAME,
               GPAX: this.sturandom[i].GPAX,
@@ -521,6 +533,7 @@ export default {
     this.Readdatasetting();
     this.Customstu()
     this.Majorcount()
+    
   },
 };
 </script>

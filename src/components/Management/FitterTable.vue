@@ -79,6 +79,10 @@ export default {
             listyear: [],
             selected: '',
             fields: [
+        {
+            key: 'ลำดับที่ลงทะเบียน',
+            sortable: false
+          },
           {
             key: 'STUDENTCODE',
             sortable: false
@@ -133,6 +137,7 @@ export default {
             .then((snapshot) => {
                 snapshot.data().stu_ft.forEach((docs) => {
                     student = {
+                        ลำดับที่ลงทะเบียน: docs.ลำดับที่ลงทะเบียน,
                         STUDENTCODE: docs.STUDENTCODE,
                         NAME: docs.NAME,
                         GRADEPOINT: docs.GRADEPOINT,

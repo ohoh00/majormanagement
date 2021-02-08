@@ -4,6 +4,9 @@
       <b-alert show class="text-center">ไม่มีข้อมูล</b-alert>
     </div>
     <div v-if="Setstatus() == false">
+    <div>
+    <b-button @click="onExport()" variant="danger">ดาวน์โหลด</b-button>
+  </div>
      <b-pagination
       align="center"
       v-model="currentPage"
@@ -11,7 +14,6 @@
       :per-page="perPage"
       aria-controls="my-table"
     ></b-pagination>
-
     <b-table  id="my-table" striped hover head-variant = 'dark' :items="datas" :fields="fields" sticky-header="600px" :per-page="perPage" :current-page="currentPage">
         <template #cell(กำหนดสาขาวิชา) = data>
             <div class="row">
@@ -31,12 +33,13 @@
 </template>
 
 <script>
+import XLSX from 'xlsx'
 import firebase from "@/firebaseConfig";
 const db = firebase.firestore();
   export default {
     data() {
       return {
-          fields: ['GPAX', 'GRADEPOINT', 'NAME', 'STUDENTCODE', 'สาขาวิชา', 'กำหนดสาขาวิชา'],
+          fields: ['ลำดับที่ลงทะเบียน','GPAX', 'GRADEPOINT', 'NAME', 'STUDENTCODE', 'สาขาวิชา', 'กำหนดสาขาวิชา'],
           datas: [],
           id:[],
           options: [],
@@ -107,7 +110,13 @@ const db = firebase.firestore();
             .catch((error) => {
             console.error('Error writing document: ', error)
             })
-        }
+        },
+        onExport() {
+            const dataWS = XLSX.utils.json_to_sheet(this.datas)
+            const wb = XLSX.utils.book_new()
+            XLSX.utils.book_append_sheet(wb, dataWS)
+            XLSX.writeFile(wb,'export.xlsx')
+        },
 
     },
     mounted() {

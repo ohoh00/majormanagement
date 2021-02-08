@@ -70,7 +70,7 @@ export default {
         .set({ Datas })
         .then(() => {
           console.log("Document successfully written!");
-          if(num >= Math.round(this.excelDatas.length/100)){
+          if((num + 1) >= Math.round(this.excelDatas.length/100)){
             this.$refs['my-modal'].hide()
             this.show = false
           }

@@ -20,6 +20,8 @@
       :sort-by.sync="sortBy"
       :sort-desc.sync="sortDesc"
       sticky-header="600px"
+      :per-page="perPage"
+      :current-page="currentPage"
     >
     </b-table>
   </div>
@@ -33,13 +35,17 @@ export default {
   data() {
     return {
       fields: [
+        {
+            key: 'ลำดับที่ลงทะเบียน',
+            sortable: false
+          },
           {
             key: 'STUDENTCODE',
-            sortable: true
+            sortable: false
           },
           {
             key: 'NAME',
-            sortable: true
+            sortable: false
           },
           {
             key: 'GRADEPOINT',
@@ -47,15 +53,15 @@ export default {
           },
           {
             key: 'GPAX',
-            sortable: true,
+            sortable: false,
           },
           {
             key: 'ลำดับที่ได้',
-            sortable: true,
+            sortable: false,
           },
           {
             key: 'สาขาวิชา',
-            sortable: true,
+            sortable: false,
           }
         ],
       perPage: 100,

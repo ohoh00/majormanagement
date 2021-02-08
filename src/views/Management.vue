@@ -15,13 +15,13 @@
       <div>
         <b-card no-body>
           <b-tabs card>
-            <b-tab title="Step 1" active>
+            <b-tab title="รายชื่อนักศึกษาทั้งหมด" active>
               <Listdatatable :Managedatas = 'datas' :Datakey = 'fields'/>
             </b-tab>
-            <b-tab title="Step 2">
+            <b-tab title="รายชื่อที่มีปัญหา(เลือก/สุ่ม)">
               <CustomTable/>
             </b-tab>
-             <b-tab title="Step 3">
+             <b-tab title="รายชื่อที่ไม่ผ่านเกณฑ์">
                <FitterTable/>
             </b-tab>
           </b-tabs>
@@ -92,6 +92,7 @@ export default {
     Filter_GP(datas){
       this.M_datas = []
       this.Fi_datas = []
+      
       this.M_datas = datas.filter((member) => {
         return member.GRADEPOINT >= this.filter
       })

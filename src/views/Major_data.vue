@@ -9,12 +9,17 @@
         @change="Readdata()"
     ></b-form-select>
     <div>
+    <b-button @click="onExport()" variant="danger">ดาวน์โหลด</b-button>
+  </div>
+  <br>
+    <div>
         <Tablemajor :datas="items"/>
     </div>
     </b-container>
 </template>
 
 <script>
+import XLSX from 'xlsx'
 import firebase from "@/firebaseConfig";
 const db = firebase.firestore();
 import Tablemajor from '@/components/Major/Tablemajor.vue'
@@ -29,7 +34,7 @@ export default {
     },
     methods:{
         Getdockey() {
-            db.collection("Dashboard").onSnapshot(snapshot =>{
+            db.collection("count_m").onSnapshot(snapshot =>{
                 this.listyear = []
                 snapshot.forEach((docs) => {
                 this.listyear.push(docs.id); 
@@ -47,7 +52,13 @@ export default {
                     console.log(docs)
                 });
             })
-        }
+        },
+        onExport() {
+            const dataWS = XLSX.utils.json_to_sheet(this.items)
+            const wb = XLSX.utils.book_new()
+            XLSX.utils.book_append_sheet(wb, dataWS)
+            XLSX.writeFile(wb,'export.xlsx')
+        },
     },
     created() {
         this.Getdockey();

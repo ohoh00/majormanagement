@@ -5,7 +5,7 @@
       <b-alert show class="text-center">โหลดข้อมูล <b-spinner small variant="primary" label="Spinning"></b-spinner></b-alert>
   </div>
     <div>
-        <b-table v-if="Setstatus()" striped hover head-variant='dark' :items="datas" :fields="fields" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc"></b-table>
+        <b-table v-if="Setstatus()" striped hover head-variant='dark' :items="datas" :fields="fields" :sort-by.sync="sortBy"></b-table>
     </div>
 </div>
 </template>

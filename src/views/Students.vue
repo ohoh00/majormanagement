@@ -69,6 +69,7 @@ export default {
           var stu = new Object
           snapshot.data().Datas.forEach((docs) => {
             stu = {
+              ลำดับที่ลงทะเบียน: docs.ลำดับที่ลงทะเบียน,
               STUDENTCODE: docs.STUDENTCODE,
               NAME: docs.NAME,
               GRADEPOINT: docs.GRADEPOINT,
