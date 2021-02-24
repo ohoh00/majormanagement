@@ -83,7 +83,7 @@ export default {
                     this.listyear.push(docs.id)
                 });
                 this.selected = this.listyear[this.listyear.length - 1]
-                console.log(this.listyear)
+                //console.log(this.listyear)
                 this.Readdata()
             })
         }

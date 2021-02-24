@@ -49,7 +49,6 @@ export default {
             .then((snapshot) => {
                 snapshot.data().cout_stu.forEach((docs) => {
                     this.items.push(docs)
-                    console.log(docs)
                 });
             })
         },
@@ -62,6 +61,13 @@ export default {
     },
     created() {
         this.Getdockey();
+  },
+  beforeCreate() {
+    firebase.auth().onAuthStateChanged(user => {
+        if (!user) {
+          this.$router.replace("/")
+        }
+    });
   },
 }
 </script>

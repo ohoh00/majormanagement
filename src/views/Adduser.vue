@@ -81,10 +81,8 @@ export default {
           db.collection('User').add({
             Name: this.name,
             Email: this.useremail,
-            Password: this.password
           })
           .then(() => {
-            console.log("Document written with ID: ");
             this.signout()
           })
           .catch(error => {
@@ -97,6 +95,13 @@ export default {
          this.$router.push("/");
        });
     },
-    }
+    },
+    beforeCreate() {
+    firebase.auth().onAuthStateChanged(user => {
+        if (!user) {
+          this.$router.replace("/")
+        }
+    });
+  },
 };
 </script>

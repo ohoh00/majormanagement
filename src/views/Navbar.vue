@@ -72,6 +72,6 @@ export default {
   },
   created() {
     this.emailuser()
-  }
+  },
 }
 </script>

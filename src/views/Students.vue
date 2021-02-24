@@ -85,5 +85,12 @@ export default {
   created() {
     this.Getdockey();
   },
+  beforeCreate() {
+    firebase.auth().onAuthStateChanged(user => {
+        if (!user) {
+          this.$router.replace("/")
+        }
+    });
+  },
 };
 </script>

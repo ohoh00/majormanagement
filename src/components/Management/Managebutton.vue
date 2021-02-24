@@ -76,6 +76,7 @@ export default {
         this.show = true
         this.Setdata_GP()
         this.Dashboardcard()
+        this.Studentsyear()
         this.Delaydata()
         this.Chartdata()
         this.count_stu()
@@ -136,6 +137,11 @@ export default {
             console.error('Error writing document: ', error)
         })
     },
+    Studentsyear() {
+      db.collection("Students").doc(this.year).set({ 
+        available: true
+      });
+    },
     Delaydata() {
       this.Managemajor()
       this.Randommajor()
@@ -184,11 +190,11 @@ export default {
       });
     },
     Max_GP() {
-      console.log("MAX = " + Math.max(...this.Gradepoint));
+      //console.log("MAX = " + Math.max(...this.Gradepoint));
       return Math.max(...this.Gradepoint);
     },
     Min_GP() {
-      console.log("MIN = " + Math.min(...this.Gradepoint));
+      //console.log("MIN = " + Math.min(...this.Gradepoint));
       return Math.min(...this.Gradepoint);
     },
     Average_Gp() {
@@ -197,7 +203,7 @@ export default {
         average_gp = average_gp + data;
       });
       average_gp = average_gp / this.Gradepoint.length;
-      console.log("average = " + average_gp.toFixed(2));
+      //console.log("average = " + average_gp.toFixed(2));
       return average_gp.toFixed(2);
     },
     Openmajor() {
@@ -209,7 +215,7 @@ export default {
           this.countmajor.push(0);
         }
       }
-      console.log("จำนวนสาขา = " + num);
+      //console.log("จำนวนสาขา = " + num);
       return num;
     },
     NumberOneMajor() {
@@ -222,7 +228,7 @@ export default {
         max_major[i] = count;
       }
       var index = max_major.indexOf(Math.max(...max_major));
-      console.log("สาขาเลือกมากสุด = " + this.datas[index].Major);
+      //console.log("สาขาเลือกมากสุด = " + this.datas[index].Major);
       return this.datas[index].Major;
     },
     SortData() {
@@ -276,12 +282,6 @@ export default {
               GRADEPOINT: this.Managedatas[i].GRADEPOINT,
               สาขาวิชา: null
             })
-            .then(function(docRef) {
-                console.log("Document written with ID: ", docRef.id);
-              })
-            .catch(function(error) {
-                console.error("Error adding document: ", error);
-              });
             i++;
             j = 0;
             break;
@@ -349,7 +349,7 @@ export default {
     Chartdata() {
       for(var i = 0; i<this.datas.length; i++){
         var result = this.students.filter((data) => {
-        console.log(this.datas[i].Major)
+        //console.log(this.datas[i].Major)
         return data.สาขาวิชา == this.datas[i].Major
         })
         var max = this.Chartmax(result)
@@ -517,9 +517,11 @@ export default {
                     num++
                 })
                 if(num == res.size) {
-                  this.show = false
-                  this.$refs['my-modal-manage'].hide()
                   console.log('Delete Document successfully')
+                  setTimeout(()=>{ 
+                  this.show = false
+                  this.$refs['my-modal-manage'].hide() 
+                  }, 8000); 
                 }
             })
     },

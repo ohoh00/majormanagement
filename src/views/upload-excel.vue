@@ -32,6 +32,7 @@
 
 <script>
 import UploadExcelComponent from "@/components/UploadExcel/index.vue";
+import firebase from "@/firebaseConfig";
 export default {
   name: "UploadExcel",
   components: { UploadExcelComponent },
@@ -70,6 +71,13 @@ export default {
       rows() {
         return this.tableData.length
       }
-  }
+  },
+  beforeCreate() {
+    firebase.auth().onAuthStateChanged(user => {
+        if (!user) {
+          this.$router.replace("/")
+        }
+    });
+  },
 };
 </script>

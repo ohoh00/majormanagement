@@ -105,5 +105,12 @@ export default {
     this.GpFitter()
     this.documentsId();
   },
+  beforeCreate() {
+    firebase.auth().onAuthStateChanged(user => {
+        if (!user) {
+          this.$router.replace("/")
+        }
+    });
+  },
 };
 </script>

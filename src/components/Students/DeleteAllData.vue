@@ -6,7 +6,7 @@
         <div>
         <b-modal ref="my-modal-delete" id="bv-modal-example-delete" hide-footer title="ลบข้อมูล">
             <div class="text-center">
-                <h4>ต้องการที่จะลบข้อมูลกดปุ่ม<b-badge>ยืนยัน</b-badge></h4>
+                <h4>ลบข้อมูลทั้งหมดของปีการศึกษานี้กดปุ่ม<b-badge>ยืนยัน</b-badge></h4>
                 <b-spinner v-if="show" variant="primary" label="Spinning"></b-spinner>
             </div>
             <div class="row">
@@ -34,10 +34,18 @@ export default {
     methods:{
         DeleteSet() {
             this.show = true
+            this.DeleteStudants_Year()
             this.DeleteStudants()
             this.DeleteDashboard()
             this.Deletecout_stu()
             this.DeleteChart()
+        },
+        DeleteStudants_Year() {
+            db.collection("Students").doc(this.selected).delete()
+             .then(() => {
+                 console.log('Dashboard Delete Year successfully')
+            }
+            )
         },
         DeleteStudants() {
             db.collection("Students").doc(this.selected).collection('data').get()
@@ -58,7 +66,7 @@ export default {
         Deletecout_stu() {
              db.collection("count_m").doc(this.selected).delete()
             .then(() => {
-                 console.log('count_m Delete Document successfully')
+                console.log('count_m Delete Document successfully')
             }
             )
         },
@@ -71,8 +79,10 @@ export default {
                     num++
                 })
                 if(num == res.size) {
-                  this.show = false
-                  this.$refs['my-modal-delete'].hide()
+                setTimeout(() =>{ 
+                    this.show = false
+                    this.$refs['my-modal-delete'].hide()
+                  }, 8000); 
                   console.log('Dashboard Chart Delete Document successfully')
                 }
                 

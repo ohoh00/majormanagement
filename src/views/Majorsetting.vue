@@ -42,6 +42,13 @@ export default {
     },
     created() {
         this.Datacodemajor()
-    }
+    },
+    beforeCreate() {
+    firebase.auth().onAuthStateChanged(user => {
+        if (!user) {
+          this.$router.replace("/")
+        }
+    });
+  },
 }
 </script>
